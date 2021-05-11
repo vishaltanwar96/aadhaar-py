@@ -1,8 +1,12 @@
 import zlib
 from io import BytesIO
 from typing import Union
+from base64 import b64encode
 
 from PIL import Image
+
+from src.utils import generate_sha256_hexdigest
+from src.exceptions import MalformedIntegerReceived
 
 
 class AadhaarSecureQR:
@@ -47,7 +51,10 @@ class AadhaarSecureQR:
         self.byte_array = self.integer_from_qr.to_bytes(length=16*1024, byteorder=self.BYTEORDER).lstrip(b'\x00')
 
         # Keeping the window size to 16 + 15 -> 31 bits
-        self.decompressed_byte_array = zlib.decompress(self.byte_array, wbits=16+zlib.MAX_WBITS)
+        try:
+            self.decompressed_byte_array = zlib.decompress(self.byte_array, wbits=16+zlib.MAX_WBITS)
+        except zlib.error:
+            raise MalformedIntegerReceived('Decompression failed, please send a valid integer received from QR code')
 
         self.decompressed_array_length = len(self.decompressed_byte_array)
 
@@ -112,6 +119,9 @@ class AadhaarSecureQR:
         return ''
 
     def get_image_data(self) -> str:
+        """
+        The decompressed image is transformed into a base64 string for easy transportation (Rest APIs)
+        """
 
         ending = self.decompressed_array_length - 256
 
@@ -128,7 +138,27 @@ class AadhaarSecureQR:
             self.list_of_indexes_of_255_delimeter[15] + 1: ending - length_to_subtract
         ]
 
-        Image.open(BytesIO(image_bytes))
+        img = Image.open(BytesIO(image_bytes))
+        with BytesIO() as output:
+            img.save(output, format='JPEG')
+            image_data = output.getvalue()
+        return b64encode(image_data).decode(self.ENCODING_USED)
+
+    def validate_mobile_number(self, mobile_number: Union[str, int]) -> bool:
+
+        if not self.is_mobile_present():
+            return False
+
+        generated_hash = generate_sha256_hexdigest(str(mobile_number), int(self._raw_extracted_data['reference_id'][3]))
+        return generated_hash == self.get_mobile_sha256_hash()
+
+    def validate_email(self, email: str) -> bool:
+
+        if not self.is_email_present():
+            return False
+
+        generated_hash = generate_sha256_hexdigest(str(email), int(self._raw_extracted_data['reference_id'][3]))
+        return generated_hash == self.get_email_sha256_hash()
 
 
 
