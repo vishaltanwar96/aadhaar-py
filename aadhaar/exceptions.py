@@ -6,3 +6,13 @@ class NumberOutOfRangeException(Exception):
 class MalformedIntegerReceived(Exception):
 
     pass
+
+
+class EmptyArchiveException(Exception):
+
+    pass
+
+
+class NoXMLFileFound(Exception):
+
+    pass
