@@ -5,8 +5,8 @@ from base64 import b64encode
 
 from PIL import Image
 
-from src.utils import generate_sha256_hexdigest
-from src.exceptions import MalformedIntegerReceived
+from aadhaar.utils import generate_sha256_hexdigest
+from aadhaar.exceptions import MalformedIntegerReceived
 
 
 class AadhaarSecureQR:

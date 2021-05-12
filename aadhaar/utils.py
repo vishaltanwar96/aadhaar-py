@@ -1,6 +1,6 @@
 from hashlib import sha256
 
-from src.exceptions import NumberOutOfRangeException
+from aadhaar.exceptions import NumberOutOfRangeException
 
 
 def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
