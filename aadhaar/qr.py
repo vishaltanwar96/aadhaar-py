@@ -169,5 +169,5 @@ class AadhaarSecureQR:
             **self._raw_extracted_data,
             'photo': self.get_image_data(),
             'is_email_present': self.is_email_present(),
-            'is_mobile_present': self.is_email_present(),
+            'is_mobile_present': self.is_mobile_present(),
         }

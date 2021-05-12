@@ -40,7 +40,7 @@ Aadhaar Secure QR:
     'vtc': 'Aratlakatta',
     'photo': 'base64_image_string',
     'is_email_present': False,
-    'is_mobile_present': False
+    'is_mobile_present': True
 }
 ```
 
