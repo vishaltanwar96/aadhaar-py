@@ -9,9 +9,9 @@ def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
     """
     if number_of_times not in range(0, 10):
         raise NumberOutOfRangeException('Number can be in range 0-9')
-
+    digest_string = input_string
     if number_of_times == 0:
         number_of_times = 1
     for _ in range(number_of_times):
-        input_string = sha256(input_string.encode()).hexdigest()
-    return input_string
+        digest_string = sha256(digest_string.encode()).hexdigest()
+    return digest_string
