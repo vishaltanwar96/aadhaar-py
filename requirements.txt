@@ -1,1 +1,2 @@
 Pillow==8.2.0
+xmltodict==0.12.0
