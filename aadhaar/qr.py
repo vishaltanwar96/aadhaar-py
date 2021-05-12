@@ -1,7 +1,7 @@
 import zlib
 from io import BytesIO
-from typing import Union
 from base64 import b64encode
+from typing import Union
 
 from PIL import Image
 
@@ -120,7 +120,7 @@ class AadhaarSecureQR:
 
     def get_image_data(self) -> str:
         """
-        The decompressed image is transformed into a base64 string for easy transportation (Rest APIs)
+        The decompressed JPEG 2000 image is transformed into a base64 string for easy transportation (Rest APIs)
         """
 
         ending = self.decompressed_array_length - 256
@@ -144,21 +144,30 @@ class AadhaarSecureQR:
             image_data = output.getvalue()
         return b64encode(image_data).decode(self.ENCODING_USED)
 
-    def validate_mobile_number(self, mobile_number: Union[str, int]) -> bool:
+    #  Currently doesn't work as expected #
+    # def validate_mobile_number(self, mobile_number: Union[str, int]) -> bool:
+    #
+    #     if not self.is_mobile_present():
+    #         return False
+    #
+    #     generated_hash = generate_sha256_hexdigest(
+    #         str(mobile_number), int(self._raw_extracted_data['reference_id'][3])
+    #     )
+    #     return generated_hash == self.get_mobile_sha256_hash()
+    #
+    # def validate_email(self, email: str) -> bool:
+    #
+    #     if not self.is_email_present():
+    #         return False
+    #
+    #     generated_hash = generate_sha256_hexdigest(str(email), int(self._raw_extracted_data['reference_id'][3]))
+    #     return generated_hash == self.get_email_sha256_hash()
 
-        if not self.is_mobile_present():
-            return False
+    def extract_data(self):
 
-        generated_hash = generate_sha256_hexdigest(str(mobile_number), int(self._raw_extracted_data['reference_id'][3]))
-        return generated_hash == self.get_mobile_sha256_hash()
-
-    def validate_email(self, email: str) -> bool:
-
-        if not self.is_email_present():
-            return False
-
-        generated_hash = generate_sha256_hexdigest(str(email), int(self._raw_extracted_data['reference_id'][3]))
-        return generated_hash == self.get_email_sha256_hash()
-
-
-
+        return {
+            **self._raw_extracted_data,
+            'photo': self.get_image_data(),
+            'is_email_present': self.is_email_present(),
+            'is_mobile_present': self.is_email_present(),
+        }
