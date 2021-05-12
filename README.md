@@ -1,5 +1,5 @@
 # aadhaar-py
-This library aims to decode the extracted information from Aadhaar Seure QR Code along with decoding the data in Aadhar Offline XML.
+This library aims to decode the extracted information from Aadhaar Secure QR Code along with decoding the data in Aadhar Offline XML.
 
 # Inspired from
 I would like to thank the authors of [pyaadhaar](https://github.com/Tanmoy741127/pyaadhaar). It wouldn't be possible to move into the right direction without this library.
