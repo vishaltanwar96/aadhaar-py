@@ -1,7 +1,7 @@
 import zlib
 from io import BytesIO
 from base64 import b64encode
-from typing import Union
+from typing import Union, Dict
 
 from PIL import Image
 
@@ -163,7 +163,7 @@ class AadhaarSecureQR:
     #     generated_hash = generate_sha256_hexdigest(str(email), int(self._raw_extracted_data['reference_id'][3]))
     #     return generated_hash == self.get_email_sha256_hash()
 
-    def extract_data(self):
+    def extract_data(self) -> Dict[str, str]:
 
         return {
             **self._raw_extracted_data,
