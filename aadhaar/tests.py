@@ -5,8 +5,17 @@ from unittest import TestCase
 from collections import OrderedDict
 
 from aadhaar.qr import AadhaarSecureQR
+from aadhaar.utils import generate_sha256_hexdigest
 from aadhaar.exceptions import MalformedIntegerReceived, EmptyArchiveException, NoXMLFileFound
 from aadhaar.offline_xml import decode_offline_xml
+
+
+class TestUtils(TestCase):
+
+    def test_generate_sha256_hexdigest(self):
+
+        test_hex_digest = 'd79ddb6ba12c0b0077571fadefe2cf3b875fc37a532ef6e084fcbef7e64e291a'
+        self.assertEqual(generate_sha256_hexdigest('9999999999', 7), test_hex_digest)
 
 
 class TestAadhaarSecureQR(TestCase):
