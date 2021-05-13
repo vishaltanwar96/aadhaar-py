@@ -13,5 +13,5 @@ def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
     if number_of_times == 0:
         number_of_times = 1
     for _ in range(number_of_times):
-        digest_string = sha256(digest_string.encode()).hexdigest()
+        digest_string = sha256(digest_string.encode('ISO-8859-1')).hexdigest()
     return digest_string
