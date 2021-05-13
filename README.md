@@ -42,13 +42,20 @@ Aadhaar Secure QR:
     'is_email_present': False,
     'is_mobile_present': True
 }
+
+# Validate mobile number and email using
+>>> secure_qr.validate_mobile_number('9999999999')
+True
+>>> secure_qr.validate_email('someuser@domain.com')
+False
 ```
 
 Aadhaar Offline XML:
 
 ```python
->>> from aadhaar.offline_xml import decode_offline_xml
->>> decode_offline_xml('path_to_zipfile.zip', share_code='1234')
+>>> from aadhaar.offline_xml import AadhaarXMLOffline
+>>> xml_offline = AadhaarXMLOffline('path_to_aadhaar.zip', 'MyShareCode@123')
+>>> xml_offline.extract_data()
 # decode_offline_xml returns an OrderedDict
 # but for readability this is changed to dict
 {
@@ -104,6 +111,12 @@ Aadhaar Offline XML:
     }
   }
 }
+
+# Validate mobile number and email using
+>>> xml_offline.validate_mobile_number('999999999')
+True
+>>> xml_offline.validate_email('someuser@domain.com')
+False
 ```
 
 # Run Tests
