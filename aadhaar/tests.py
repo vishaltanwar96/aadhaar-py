@@ -1,6 +1,7 @@
 import os
 import zipfile
 from unittest import TestCase
+from tempfile import NamedTemporaryFile
 from collections import OrderedDict
 
 from aadhaar.qr import AadhaarSecureQR
@@ -171,14 +172,11 @@ class TestAadhaarOfflineXML(TestCase):
 
     def test_not_zipfile(self):
 
-        filename = 'filename.txt'
-
-        with open(filename, 'w') as txtfile:
-            txtfile.write('Some Text File')
-        with self.assertRaises(zipfile.BadZipfile):
-            xml_offline = AadhaarXMLOffline(filename, self.SHARE_CODE)
-            xml_offline.extract_data()
-        os.remove(filename)
+        with NamedTemporaryFile(mode='w') as ntf:
+            ntf.write('Sometext')
+            with self.assertRaises(zipfile.BadZipfile):
+                xml_offline = AadhaarXMLOffline(ntf.name, self.SHARE_CODE)
+                xml_offline.extract_data()
 
     def test_empty_zipfile(self):
 
