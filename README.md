@@ -56,7 +56,7 @@ Aadhaar Offline XML:
 >>> from aadhaar.offline_xml import AadhaarXMLOffline
 >>> xml_offline = AadhaarXMLOffline('path_to_aadhaar.zip', 'MyShareCode@123')
 >>> xml_offline.extract_data()
-# decode_offline_xml returns an OrderedDict
+# AadhaarXMLOffline.extract_data returns an OrderedDict
 # but for readability this is changed to dict
 {
   "OfflinePaperlessKyc": {
