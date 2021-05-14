@@ -1,13 +1,12 @@
 import os
 import zipfile
-from tempfile import TemporaryFile
 from unittest import TestCase
 from collections import OrderedDict
 
 from aadhaar.qr import AadhaarSecureQR
 from aadhaar.utils import generate_sha256_hexdigest
 from aadhaar.exceptions import MalformedIntegerReceived, EmptyArchiveException, NoXMLFileFound
-from aadhaar.offline_xml import decode_offline_xml
+from aadhaar.offline_xml import AadhaarXMLOffline
 
 
 class TestUtils(TestCase):
@@ -160,7 +159,8 @@ class TestAadhaarOfflineXML(TestCase):
 
     def test_working_aadhaar_offline_xml(self):
 
-        decoded_aadhaar_data = decode_offline_xml(self.zip_file_path, self.SHARE_CODE)
+        xml_offline = AadhaarXMLOffline(self.zip_file_path, self.SHARE_CODE)
+        decoded_aadhaar_data = xml_offline.extract_data()
         self.assertIn('OfflinePaperlessKyc', decoded_aadhaar_data)
         self.assertIn('referenceId', decoded_aadhaar_data['OfflinePaperlessKyc'])
         self.assertIn('UidData', decoded_aadhaar_data['OfflinePaperlessKyc'])
@@ -171,10 +171,14 @@ class TestAadhaarOfflineXML(TestCase):
 
     def test_not_zipfile(self):
 
-        with TemporaryFile(mode='wb') as tf:
-            tf.write(b'PK\x05\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
-            with self.assertRaises(zipfile.BadZipfile):
-                decode_offline_xml(tf, self.SHARE_CODE)
+        filename = 'filename.txt'
+
+        with open(filename, 'w') as txtfile:
+            txtfile.write('Some Text File')
+        with self.assertRaises(zipfile.BadZipfile):
+            xml_offline = AadhaarXMLOffline(filename, self.SHARE_CODE)
+            xml_offline.extract_data()
+        os.remove(filename)
 
     def test_empty_zipfile(self):
 
@@ -182,7 +186,8 @@ class TestAadhaarOfflineXML(TestCase):
         with open(file_name, 'wb') as empty_zipfile:
             empty_zipfile.write(b'PK\x05\x06\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00')
         with self.assertRaises(EmptyArchiveException):
-            decode_offline_xml(file_name, self.SHARE_CODE)
+            xml_offline = AadhaarXMLOffline(file_name, self.SHARE_CODE)
+            xml_offline.extract_data()
         os.remove(file_name)
 
     def test_no_xml_zipfile(self):
@@ -191,10 +196,12 @@ class TestAadhaarOfflineXML(TestCase):
         with zipfile.ZipFile(zipfile_name, 'w') as zf:
             zf.writestr('test.txt', 'Sample Text Data')
         with self.assertRaises(NoXMLFileFound):
-            decode_offline_xml(zipfile_name, self.SHARE_CODE)
+            xml_offline = AadhaarXMLOffline(zipfile_name, self.SHARE_CODE)
+            xml_offline.extract_data()
         os.remove(zipfile_name)
 
     def test_invalid_sharecode(self):
 
         with self.assertRaises(RuntimeError):
-            decode_offline_xml(self.zip_file_path, 3456)
+            xml_offline = AadhaarXMLOffline(self.zip_file_path, 3456)
+            xml_offline.extract_data()
