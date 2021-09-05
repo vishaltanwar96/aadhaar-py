@@ -13,6 +13,9 @@ I would like to thank the authors of [pyaadhaar](https://github.com/Tanmoy741127
 6. Type Hints
 7. Better exception handling
 
+# Demo
+[Secure Aadhaar QR Decoder](https://aadhaar-secure-qr.herokuapp.com/)
+
 # Enough talk, show me how it works!
 
 Aadhaar Secure QR:
