@@ -1,3 +1,33 @@
+[tool.poetry]
+name = "aadhaar-py"
+version = "2.0.0"
+description = "Extract embedded information from Aadhaar Secure QR Code."
+authors = ["Vishal Tanwar <vishal.tanwar@outlook.com>"]
+license = "MIT"
+
+[tool.poetry.dependencies]
+python = "^3.9"
+
+[tool.poetry.dev-dependencies]
+black = "^21.9b0"
+isort = "^5.9.3"
+mypy = "^0.910"
+
+[tool.isort]
+profile = "black"
+
+[tool.black]
+line-length = 88
+target-version = ['py39']
+include = '\.pyi?$'
+
+[tool.mypy]
+python_version = "3.9"
+warn_return_any = true
+warn_unused_configs = true
+files = "aadhaar/,tests/"
+
+
 [build-system]
-requires = ["setuptools", "wheel"]
-build-backend = "setuptools.build_meta"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
