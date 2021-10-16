@@ -3,10 +3,10 @@ repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.0.1
     hooks:
-      - id: trailing-whitespace
-        name: Trim Trailing Whitespace
       - id: no-commit-to-branch
         name: Check Commit on Protected Branch
+      - id: trailing-whitespace
+        name: Trim Trailing Whitespace
       - id: end-of-file-fixer
         name: Add Newline at EOF
   - repo: https://github.com/asottile/add-trailing-comma
