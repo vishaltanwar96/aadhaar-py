@@ -23,8 +23,8 @@ jobs:
       uses: snok/install-poetry@v1
       with:
         version: 1.1.8
+        virtualenvs-create: false
     - name: Install Project Dependencies
       run: poetry install --no-interaction --no-root
     - name: Check Adhere to Black
       run: black . --check --verbose
-      
