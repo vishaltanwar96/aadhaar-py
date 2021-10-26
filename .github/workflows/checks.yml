@@ -32,3 +32,5 @@ jobs:
       run: mypy
     - name: Isort Import Sorting Check
       run: isort . --check --diff
+    - name: Flake8 Check
+      run: flake8
