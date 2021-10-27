@@ -12,6 +12,7 @@ python = "^3.9"
 black = "^21.9b0"
 isort = "^5.9.3"
 mypy = "^0.910"
+flake8 = "^4.0.1"
 
 [tool.isort]
 profile = "black"

@@ -1,14 +1,14 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Black Check
+name: Checks
 on:
   push:
   pull_request:
     branches: [ main ]
 
 jobs:
-  build:
+  checks:
 
     runs-on: ubuntu-latest
 
@@ -23,8 +23,14 @@ jobs:
       uses: snok/install-poetry@v1
       with:
         version: 1.1.8
+        virtualenvs-create: false
     - name: Install Project Dependencies
       run: poetry install --no-interaction --no-root
     - name: Check Adhere to Black
       run: black . --check --verbose
-      
+    - name: Mypy Typing Check
+      run: mypy
+    - name: Isort Import Sorting Check
+      run: isort . --check --diff
+    - name: Flake8 Check
+      run: flake8
