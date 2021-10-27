@@ -8,4 +8,7 @@ class SecureQRCodeScannedInteger:
 
 class SecureQRCompressedBytesData:
     def __init__(self, data: bytes) -> None:
+        self._data = data
+
+    def decompress(self):
         pass

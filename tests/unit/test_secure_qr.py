@@ -17,5 +17,6 @@ class TestSecureQRCodeScannedInteger(TestCase):
 
 
 class TestSecureQRCompressedBytesData(TestCase):
-    def test_has_the_specified_class(self) -> None:
-        SecureQRCompressedBytesData(b"\x00")
+    def test_has_decompress_method(self) -> None:
+        compressed_bytes_data = SecureQRCompressedBytesData(b"\x00")
+        compressed_bytes_data.decompress()
