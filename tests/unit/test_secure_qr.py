@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from aadhaar.secure_qr import SecureQRCodeScannedInteger
+from aadhaar.secure_qr import SecureQRCodeScannedInteger, SecureQRCompressedBytesData
 
 
 class TestSecureQRCodeScannedInteger(TestCase):
@@ -14,3 +14,8 @@ class TestSecureQRCodeScannedInteger(TestCase):
 
     def test_expects_converted_bytes_to_be_equal_to_setup_bytes_data(self) -> None:
         self.assertEqual(self.bytes_data, self.scanned_integer.convert_to_bytes())
+
+
+class TestSecureQRCompressedBytesData(TestCase):
+    def test_has_the_specified_class(self) -> None:
+        SecureQRCompressedBytesData(b"\x00")

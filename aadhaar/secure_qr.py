@@ -4,3 +4,8 @@ class SecureQRCodeScannedInteger:
 
     def convert_to_bytes(self) -> bytes:
         return self._data.to_bytes(byteorder="big", length=16 * 1024)
+
+
+class SecureQRCompressedBytesData:
+    def __init__(self, data: bytes) -> None:
+        pass
