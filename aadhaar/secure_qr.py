@@ -10,25 +10,18 @@ class SecureQRCodeScannedInteger:
         self._data = data
 
     def convert_to_bytes(self) -> bytes:
-        return self._data.to_bytes(byteorder="big", length=16 * 1024)
-
-
-class SecureQRCompressedBytesData:
-    def __init__(self, data: bytes) -> None:
-        self._data = data
-
-    def _remove_null_bytes_from_left(self) -> bytes:
-        return self._data.lstrip(b"\x00")
+        try:
+            return self._data.to_bytes(byteorder="big", length=16 * 1024)
+        except AttributeError:
+            raise TypeError("Please send a valid integer value")
 
     def decompress(self):
-        bytes_data = self._remove_null_bytes_from_left()
+        bytes_data = self.convert_to_bytes()
+        bytes_data = bytes_data.lstrip(b"\x00")
         try:
-            decompressed_bytes_data = zlib.decompress(
-                bytes_data,
-                wbits=zlib.MAX_WBITS + 15,
-            )
+            decompressed_data = zlib.decompress(bytes_data, wbits=zlib.MAX_WBITS + 15)
         except zlib.error:
             raise MalformedDataReceived(
                 "Decompression failed, Please provide valid data.",
             )
-        return decompressed_bytes_data
+        return decompressed_data
