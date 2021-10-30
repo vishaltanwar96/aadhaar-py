@@ -1,11 +1,9 @@
 import pathlib
 from unittest import TestCase
 
-from aadhaar.secure_qr import (
-    MalformedDataReceived,
-    SecureQRCodeScannedInteger,
-    SecureQRCompressedBytesData,
-)
+from aadhaar.secure_qr import MalformedDataReceived
+from aadhaar.secure_qr import SecureQRCodeScannedInteger
+from aadhaar.secure_qr import SecureQRCompressedBytesData
 
 
 class TestSecureQRCodeScannedInteger(TestCase):
