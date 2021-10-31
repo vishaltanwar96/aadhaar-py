@@ -48,6 +48,12 @@ class TestSecureQRCompressedBytesData(TestCase):
 
 
 class TestExtractData(TestCase):
-    def test_has_method_to_extract_email_mobile_indicator_bit(self) -> None:
-        extract_data = ExtractData()
-        extract_data.extract_email_mobile_indicator_bit()
+    def setUp(self) -> None:
+        self.extract_data = ExtractData(b"3\xff")
+
+    def test_returns_expected_indicator_bit_when_extracted(self) -> None:
+        expected_indicator_bit = 3
+        self.assertEqual(
+            expected_indicator_bit,
+            self.extract_data.extract_email_mobile_indicator_bit(),
+        )

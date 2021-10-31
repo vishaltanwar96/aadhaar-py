@@ -35,8 +35,9 @@ class SecureQRCompressedBytesData:
 
 
 class ExtractData:
-    def __init__(self) -> None:
-        pass
+    def __init__(self, data: bytes) -> None:
+        self._data = data
+        self._encoding_to_use = "ISO-8859-1"
 
-    def extract_email_mobile_indicator_bit(self) -> None:
-        pass
+    def extract_email_mobile_indicator_bit(self) -> int:
+        return int(self._data[0 : self._data.find(255)].decode(self._encoding_to_use))
