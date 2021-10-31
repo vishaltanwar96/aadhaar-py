@@ -41,3 +41,6 @@ class ExtractData:
 
     def extract_email_mobile_indicator_bit(self) -> int:
         return int(self._data[0 : self._data.find(255)].decode(self._encoding_to_use))
+
+    def _find_indexes_of_255_delimiters(self) -> list[int]:
+        return [index for (index, value) in enumerate(self._data) if value == 255]

@@ -49,11 +49,23 @@ class TestSecureQRCompressedBytesData(TestCase):
 
 class TestExtractData(TestCase):
     def setUp(self) -> None:
-        self.extract_data = ExtractData(b"3\xff")
+        bytes_data = (
+            b"3\xff890820190305150137123\xffPenumarthi Venkat\xff"
+            b"07-05-1987\xffM\xffS/O: Pattabhi Rama Rao\xff"
+            b"East Godavari\xffNear Siva Temple\xff4-83"
+        )
+        self.extract_data = ExtractData(bytes_data)
 
     def test_returns_expected_indicator_bit_when_extracted(self) -> None:
         expected_indicator_bit = 3
         self.assertEqual(
             expected_indicator_bit,
             self.extract_data.extract_email_mobile_indicator_bit(),
+        )
+
+    def test_returns_expected_list_of_255_delimiter_when_called(self) -> None:
+        expected_list_of_255_delimiter = [1, 23, 41, 52, 54, 77, 91, 108]
+        self.assertEqual(
+            expected_list_of_255_delimiter,
+            self.extract_data._find_indexes_of_255_delimiters(),
         )
