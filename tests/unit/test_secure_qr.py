@@ -48,5 +48,6 @@ class TestSecureQRCompressedBytesData(TestCase):
 
 
 class TestExtractData(TestCase):
-    def test_extract_data_class_exists(self) -> None:
-        ExtractData()
+    def test_has_method_to_extract_email_mobile_indicator_bit(self) -> None:
+        extract_data = ExtractData()
+        extract_data.extract_email_mobile_indicator_bit()

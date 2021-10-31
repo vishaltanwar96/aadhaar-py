@@ -37,3 +37,6 @@ class SecureQRCompressedBytesData:
 class ExtractData:
     def __init__(self) -> None:
         pass
+
+    def extract_email_mobile_indicator_bit(self) -> None:
+        pass
