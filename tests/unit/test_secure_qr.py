@@ -1,6 +1,7 @@
 import pathlib
 from unittest import TestCase
 
+from aadhaar.secure_qr import ExtractData
 from aadhaar.secure_qr import MalformedDataReceived
 from aadhaar.secure_qr import SecureQRCodeScannedInteger
 from aadhaar.secure_qr import SecureQRCompressedBytesData
@@ -44,3 +45,8 @@ class TestSecureQRCompressedBytesData(TestCase):
         compressed_bytes_data = SecureQRCompressedBytesData(self.dummy_bytes_data)
         with self.assertRaises(MalformedDataReceived):
             compressed_bytes_data.decompress()
+
+
+class TestExtractData(TestCase):
+    def test_extract_data_class_exists(self) -> None:
+        ExtractData()

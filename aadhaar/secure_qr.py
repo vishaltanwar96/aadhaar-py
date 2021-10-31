@@ -32,3 +32,8 @@ class SecureQRCompressedBytesData:
                 "Decompression failed, Please provide valid data.",
             )
         return decompressed_bytes_data
+
+
+class ExtractData:
+    def __init__(self) -> None:
+        pass
