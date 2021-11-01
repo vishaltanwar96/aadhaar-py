@@ -74,7 +74,7 @@ class SecureQRCompressedBytesData:
         return decompressed_bytes_data
 
 
-class ExtractData:
+class SecureQRDataExtractor:
     def __init__(self, data: bytes) -> None:
         self._data = data
         self._ENCODING_TO_USE = "ISO-8859-1"

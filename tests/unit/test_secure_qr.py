@@ -3,13 +3,13 @@ from datetime import datetime
 from unittest import TestCase
 
 from aadhaar.secure_qr import Address
-from aadhaar.secure_qr import ExtractData
 from aadhaar.secure_qr import ExtractedTextData
 from aadhaar.secure_qr import Gender
 from aadhaar.secure_qr import MalformedDataReceived
 from aadhaar.secure_qr import ReferenceId
 from aadhaar.secure_qr import SecureQRCodeScannedInteger
 from aadhaar.secure_qr import SecureQRCompressedBytesData
+from aadhaar.secure_qr import SecureQRDataExtractor
 
 
 def _resolve_test_data_directory_path() -> pathlib.PurePath:
@@ -66,7 +66,7 @@ class TestExtractData(TestCase):
 
     def setUp(self) -> None:
         self.sample_bytes_data = self._prepare_test_qr_code_data().encode("ISO-8859-1")
-        self.extract_data = ExtractData(self.sample_bytes_data)
+        self.extract_data = SecureQRDataExtractor(self.sample_bytes_data)
 
     def test_returns_expected_indicator_bit_when_extracted(self) -> None:
         expected_indicator_bit = 2
