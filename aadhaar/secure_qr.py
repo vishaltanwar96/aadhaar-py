@@ -103,13 +103,15 @@ class ExtractData:
     def _find_indexes_of_255_delimiters(self) -> list[int]:
         return [index for (index, value) in enumerate(self._data) if value == 255]
 
-    def _make_reference_id(self, extracted_data: str) -> ReferenceId:
+    @staticmethod
+    def _make_reference_id(extracted_data: str) -> ReferenceId:
         return ReferenceId(
             last_four_aadhaar_digits=extracted_data[:4],
             timestamp=datetime.strptime(extracted_data[4:], "%Y%m%d%H%M%S%f"),
         )
 
-    def _select_gender(self, extracted_data: str) -> Gender:
+    @staticmethod
+    def _select_gender(extracted_data: str) -> Gender:
         if re.match(pattern=r"m|male", string=extracted_data, flags=re.IGNORECASE):
             return Gender.MALE
         elif re.match(pattern=r"f|female", string=extracted_data, flags=re.IGNORECASE):
