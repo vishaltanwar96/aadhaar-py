@@ -3,7 +3,6 @@ import zlib
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
-from typing import Dict
 
 
 class MalformedDataReceived(Exception):
@@ -141,7 +140,7 @@ class ExtractData:
             ),
         )
 
-    def _extract_text_data(self, indexes: list[int]) -> Dict[str, str]:
+    def _extract_text_data(self, indexes: list[int]) -> dict[str, str]:
         raw_extracted_data = {}
         previous = self._data.find(255) + 1
         for detail, index_position in zip(self._details, indexes):
