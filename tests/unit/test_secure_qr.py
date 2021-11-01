@@ -1,8 +1,13 @@
 import pathlib
+from datetime import datetime
 from unittest import TestCase
 
+from aadhaar.secure_qr import Address
 from aadhaar.secure_qr import ExtractData
+from aadhaar.secure_qr import ExtractedTextData
+from aadhaar.secure_qr import Gender
 from aadhaar.secure_qr import MalformedDataReceived
+from aadhaar.secure_qr import ReferenceId
 from aadhaar.secure_qr import SecureQRCodeScannedInteger
 from aadhaar.secure_qr import SecureQRCompressedBytesData
 
@@ -31,7 +36,7 @@ class TestSecureQRCompressedBytesData(TestCase):
         current_file = pathlib.Path(__file__).resolve()
         project_root = current_file.parent.parent.parent
         with open(
-            project_root / "test_data" / "secure_qr_data.txt",
+            project_root / "test_data" / "secure_qr_sample_integer_data.txt",
         ) as sample_data_file:
             sample_data = sample_data_file.read()
         return int(sample_data)
@@ -48,24 +53,60 @@ class TestSecureQRCompressedBytesData(TestCase):
 
 
 class TestExtractData(TestCase):
+    def _prepare_test_qr_code_data(self) -> str:
+        current_file = pathlib.Path(__file__).resolve()
+        project_root = current_file.parent.parent.parent
+        with open(
+            project_root / "test_data" / "secure_qr_sample_bytes_data.txt",
+        ) as sample_data_file:
+            sample_data = sample_data_file.read()
+        return sample_data
+
     def setUp(self) -> None:
-        bytes_data = (
-            b"3\xff890820190305150137123\xffPenumarthi Venkat\xff"
-            b"07-05-1987\xffM\xffS/O: Pattabhi Rama Rao\xff"
-            b"East Godavari\xffNear Siva Temple\xff4-83"
-        )
-        self.extract_data = ExtractData(bytes_data)
+        self.sample_bytes_data = self._prepare_test_qr_code_data().encode("ISO-8859-1")
+        self.extract_data = ExtractData(self.sample_bytes_data)
 
     def test_returns_expected_indicator_bit_when_extracted(self) -> None:
-        expected_indicator_bit = 3
+        expected_indicator_bit = 2
         self.assertEqual(
             expected_indicator_bit,
-            self.extract_data.extract_email_mobile_indicator_bit(),
+            self.extract_data._extract_email_mobile_indicator_bit(),
         )
 
     def test_returns_expected_list_of_255_delimiter_when_called(self) -> None:
-        expected_list_of_255_delimiter = [1, 23, 41, 52, 54, 77, 91, 108]
+        expected_list_of_255_delimiter = [
+            index
+            for (index, value) in enumerate(self.sample_bytes_data)
+            if value == 255
+        ]
         self.assertEqual(
             expected_list_of_255_delimiter,
             self.extract_data._find_indexes_of_255_delimiters(),
         )
+
+    def test_returns_expected_extracted_text_data(self) -> None:
+        reference_id = ReferenceId(
+            last_four_aadhaar_digits="8908",
+            timestamp=datetime.strptime("20190305150137123", "%Y%m%d%H%M%S%f"),
+        )
+        address = Address(
+            care_of="S/O: Pattabhi Rama Rao",
+            district="East Godavari",
+            landmark="Near Siva Temple",
+            house="4-83",
+            location="Sctor-2",
+            pin_code="533016",
+            post_office="Aratlakatta",
+            state="Andhra Pradesh",
+            street="Main Road",
+            sub_district="Karapa",
+            vtc="Aratlakatta",
+        )
+        expected_text_data = ExtractedTextData(
+            name="Penumarthi Venkat",
+            reference_id=reference_id,
+            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y"),
+            gender=Gender.MALE,
+            address=address,
+        )
+        self.assertEqual(expected_text_data, self.extract_data._make_text_data())
