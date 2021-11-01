@@ -12,6 +12,12 @@ from aadhaar.secure_qr import SecureQRCodeScannedInteger
 from aadhaar.secure_qr import SecureQRCompressedBytesData
 
 
+def _resolve_test_data_directory_path() -> pathlib.PurePath:
+    current_file = pathlib.Path(__file__).resolve()
+    project_root = current_file.parent.parent.parent
+    return project_root / "test_data"
+
+
 class TestSecureQRCodeScannedInteger(TestCase):
     def setUp(self) -> None:
         data = 12345
@@ -33,10 +39,8 @@ class TestSecureQRCompressedBytesData(TestCase):
         self.dummy_bytes_data = dummy_int.to_bytes(length=16 * 1024, byteorder="big")
 
     def _prepare_test_qr_code_data(self) -> int:
-        current_file = pathlib.Path(__file__).resolve()
-        project_root = current_file.parent.parent.parent
         with open(
-            project_root / "test_data" / "secure_qr_sample_integer_data.txt",
+            _resolve_test_data_directory_path() / "secure_qr_sample_integer_data.txt",
         ) as sample_data_file:
             sample_data = sample_data_file.read()
         return int(sample_data)
@@ -54,10 +58,8 @@ class TestSecureQRCompressedBytesData(TestCase):
 
 class TestExtractData(TestCase):
     def _prepare_test_qr_code_data(self) -> str:
-        current_file = pathlib.Path(__file__).resolve()
-        project_root = current_file.parent.parent.parent
         with open(
-            project_root / "test_data" / "secure_qr_sample_bytes_data.txt",
+            _resolve_test_data_directory_path() / "secure_qr_sample_bytes_data.txt",
         ) as sample_data_file:
             sample_data = sample_data_file.read()
         return sample_data
@@ -110,3 +112,6 @@ class TestExtractData(TestCase):
             address=address,
         )
         self.assertEqual(expected_text_data, self.extract_data._make_text_data())
+
+    def test_returns_expected_image(self) -> None:
+        pass
