@@ -192,6 +192,14 @@ optional = false
 python-versions = ">=3.6"
 
 [[package]]
+name = "types-pillow"
+version = "8.3.7"
+description = "Typing stubs for Pillow"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "typing-extensions"
 version = "3.10.0.2"
 description = "Backported and Experimental Type Hints for Python 3.5+"
@@ -202,7 +210,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "d36a8e85ec60b47a94276ca29d3cb6480bea0ea8f66a842ef8d52630c70161dc"
+content-hash = "3b339ccd2527bee212d06801c3c06eee0664cc2371d0840cd2f8fb729b46b752"
 
 [metadata.files]
 add-trailing-comma = [
@@ -381,6 +389,10 @@ toml = [
 tomli = [
     {file = "tomli-1.2.1-py3-none-any.whl", hash = "sha256:8dd0e9524d6f386271a36b41dbf6c57d8e32fd96fd22b6584679dc569d20899f"},
     {file = "tomli-1.2.1.tar.gz", hash = "sha256:a5b75cb6f3968abb47af1b40c1819dc519ea82bcc065776a866e8d74c5ca9442"},
+]
+types-pillow = [
+    {file = "types-Pillow-8.3.7.tar.gz", hash = "sha256:8f1d4eaedc0aa8c8fe4f912daff31abd79f04a42d9fda1b3f30c442f906fcff4"},
+    {file = "types_Pillow-8.3.7-py3-none-any.whl", hash = "sha256:c76f76459e505b6621d2aaa66a69d3a4b123ccea3563d8aad200db1c16e8a8fa"},
 ]
 typing-extensions = [
     {file = "typing_extensions-3.10.0.2-py2-none-any.whl", hash = "sha256:d8226d10bc02a29bcc81df19a26e56a9647f8b0a6d4a83924139f4a8b01f17b7"},
