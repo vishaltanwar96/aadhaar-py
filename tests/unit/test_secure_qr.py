@@ -1,5 +1,7 @@
 import pathlib
+import pickle
 from datetime import datetime
+from io import BytesIO
 from unittest import TestCase
 
 from aadhaar.secure_qr import Address
@@ -33,12 +35,12 @@ class TestSecureQRCodeScannedInteger(TestCase):
 
 class TestSecureQRCompressedBytesData(TestCase):
     def setUp(self) -> None:
-        qr_data_int = self._prepare_test_qr_code_data()
+        qr_data_int = self._prepare_test_qr_code_integer_data()
         dummy_int = 1234567
         self.qr_data_bytes = qr_data_int.to_bytes(length=16 * 1024, byteorder="big")
         self.dummy_bytes_data = dummy_int.to_bytes(length=16 * 1024, byteorder="big")
 
-    def _prepare_test_qr_code_data(self) -> int:
+    def _prepare_test_qr_code_integer_data(self) -> int:
         with open(
             _resolve_test_data_directory_path() / "secure_qr_sample_integer_data.txt",
         ) as sample_data_file:
@@ -57,15 +59,18 @@ class TestSecureQRCompressedBytesData(TestCase):
 
 
 class TestExtractData(TestCase):
-    def _prepare_test_qr_code_data(self) -> str:
+    def _prepare_test_qr_code_bytes_data(self) -> bytes:
         with open(
-            _resolve_test_data_directory_path() / "secure_qr_sample_bytes_data.txt",
+            _resolve_test_data_directory_path() / "secure_qr_sample_bytes_data.pickle",
+            "rb",
         ) as sample_data_file:
-            sample_data = sample_data_file.read()
-        return sample_data
+            return bytes(pickle.load(sample_data_file))
+
+    def _prepare_test_aadhaar_image_path(self) -> pathlib.PurePath:
+        return _resolve_test_data_directory_path() / "aadhaar_image.jpeg"
 
     def setUp(self) -> None:
-        self.sample_bytes_data = self._prepare_test_qr_code_data().encode("ISO-8859-1")
+        self.sample_bytes_data = self._prepare_test_qr_code_bytes_data()
         self.extract_data = SecureQRDataExtractor(self.sample_bytes_data)
 
     def test_returns_expected_indicator_bit_when_extracted(self) -> None:
@@ -114,4 +119,13 @@ class TestExtractData(TestCase):
         self.assertEqual(expected_text_data, self.extract_data._make_text_data())
 
     def test_returns_expected_image(self) -> None:
-        pass
+        with open(
+            self._prepare_test_aadhaar_image_path().as_posix(),
+            "rb",
+        ) as expected_image:
+            expected_image_bytes = expected_image.read()
+        actual_image = self.extract_data._extract_aadhaar_image()
+        with BytesIO() as output:
+            actual_image.save(output, format="JPEG")
+            actual_image_bytes = output.getvalue()
+        self.assertEqual(expected_image_bytes, actual_image_bytes)

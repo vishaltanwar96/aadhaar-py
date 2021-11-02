@@ -3,6 +3,9 @@ import zlib
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+from io import BytesIO
+
+from PIL import Image
 
 
 class MalformedDataReceived(Exception):
@@ -150,3 +153,22 @@ class SecureQRDataExtractor:
             raw_extracted_data[detail] = extracted_detail
             previous = index_position + 1
         return raw_extracted_data
+
+    def _extract_aadhaar_image(self) -> Image.Image:
+        ending = len(self._data) - 256
+        length_to_subtract = self._calculate_length_to_subtract()
+        image_bytes = self._data[
+            self._find_indexes_of_255_delimiters()[15] + 1 : ending - length_to_subtract
+        ]
+        return Image.open(BytesIO(image_bytes))
+
+    def _calculate_length_to_subtract(self):
+        email_mobile_indicator_bit = self._extract_email_mobile_indicator_bit()
+
+        if email_mobile_indicator_bit == 3:
+            length_to_subtract = 32 * 2
+        elif email_mobile_indicator_bit == 1 or email_mobile_indicator_bit == 2:
+            length_to_subtract = 32 * 1
+        else:
+            length_to_subtract = 32 * 0
+        return length_to_subtract
