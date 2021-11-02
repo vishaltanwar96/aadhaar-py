@@ -5,6 +5,7 @@ from io import BytesIO
 from unittest import TestCase
 
 from aadhaar.secure_qr import Address
+from aadhaar.secure_qr import EmailMobileIndicator
 from aadhaar.secure_qr import ExtractedTextData
 from aadhaar.secure_qr import Gender
 from aadhaar.secure_qr import MalformedDataReceived
@@ -78,6 +79,13 @@ class TestExtractData(TestCase):
         self.assertEqual(
             expected_indicator_bit,
             self.extract_data._extract_email_mobile_indicator_bit(),
+        )
+
+    def test_returns_expected_indicator_when_extracted(self) -> None:
+        expected_indicator = EmailMobileIndicator.EMAIL_ABSENT_MOBILE_PRESENT
+        self.assertEqual(
+            expected_indicator,
+            self.extract_data._get_email_mobile_indicator(),
         )
 
     def test_returns_expected_list_of_255_delimiter_when_called(self) -> None:

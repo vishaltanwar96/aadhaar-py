@@ -18,6 +18,13 @@ class Gender(Enum):
     TRANSGENDER = "Transgender"
 
 
+class EmailMobileIndicator(Enum):
+    EMAIL_MOBILE_BOTH_ABSENT = 0
+    EMAIL_PRESENT_MOBILE_ABSENT = 1
+    EMAIL_ABSENT_MOBILE_PRESENT = 2
+    EMAIL_MOBILE_BOTH_PRESENT = 3
+
+
 @dataclass(frozen=True)
 class ReferenceId:
     last_four_aadhaar_digits: str
@@ -102,6 +109,9 @@ class SecureQRDataExtractor:
     def _extract_email_mobile_indicator_bit(self) -> int:
         return int(self._data[0 : self._data.find(255)].decode(self._ENCODING_TO_USE))
 
+    def _get_email_mobile_indicator(self) -> EmailMobileIndicator:
+        return EmailMobileIndicator(self._extract_email_mobile_indicator_bit())
+
     def _find_indexes_of_255_delimiters(self) -> list[int]:
         return [index for (index, value) in enumerate(self._data) if value == 255]
 
@@ -163,11 +173,16 @@ class SecureQRDataExtractor:
         return Image.open(BytesIO(image_bytes))
 
     def _calculate_length_to_subtract(self):
-        email_mobile_indicator_bit = self._extract_email_mobile_indicator_bit()
+        email_mobile_indicator_bit = self._get_email_mobile_indicator()
 
-        if email_mobile_indicator_bit == 3:
+        if email_mobile_indicator_bit == EmailMobileIndicator.EMAIL_MOBILE_BOTH_PRESENT:
             length_to_subtract = 32 * 2
-        elif email_mobile_indicator_bit == 1 or email_mobile_indicator_bit == 2:
+        elif (
+            email_mobile_indicator_bit
+            == EmailMobileIndicator.EMAIL_ABSENT_MOBILE_PRESENT
+            or email_mobile_indicator_bit
+            == EmailMobileIndicator.EMAIL_PRESENT_MOBILE_ABSENT
+        ):
             length_to_subtract = 32 * 1
         else:
             length_to_subtract = 32 * 0
