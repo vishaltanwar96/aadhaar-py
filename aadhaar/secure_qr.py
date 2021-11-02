@@ -175,13 +175,14 @@ class SecureQRDataExtractor:
     def _calculate_length_to_subtract(self):
         email_mobile_indicator_bit = self._get_email_mobile_indicator()
 
-        if email_mobile_indicator_bit == EmailMobileIndicator.EMAIL_MOBILE_BOTH_PRESENT:
+        if email_mobile_indicator_bit is EmailMobileIndicator.EMAIL_MOBILE_BOTH_PRESENT:
             length_to_subtract = 32 * 2
         elif (
             email_mobile_indicator_bit
-            == EmailMobileIndicator.EMAIL_ABSENT_MOBILE_PRESENT
-            or email_mobile_indicator_bit
-            == EmailMobileIndicator.EMAIL_PRESENT_MOBILE_ABSENT
+            is EmailMobileIndicator.EMAIL_ABSENT_MOBILE_PRESENT
+        ) or (
+            email_mobile_indicator_bit
+            is EmailMobileIndicator.EMAIL_PRESENT_MOBILE_ABSENT
         ):
             length_to_subtract = 32 * 1
         else:
