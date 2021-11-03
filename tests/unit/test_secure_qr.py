@@ -53,22 +53,33 @@ class TestGenerateSha256Hexdigest(TestCase):
 
 
 class TestEmail(TestCase):
-    def test_raises_exception_when_none_email_is_verified(self) -> None:
-        reference_id = ReferenceId(
+    def setUp(self) -> None:
+        self.hex_string = (
+            "915c062c5211a225ef947ee949a685743684fa05cb3566c6e2306a5a7603eb0e"
+        )
+        self.reference_id = ReferenceId(
             last_four_aadhaar_digits="1234",
             timestamp=datetime(year=1996, month=4, day=25),
         )
-        email = Email(hex_string=None, reference_id=reference_id)
+
+    def test_raises_exception_when_none_email_is_verified(self) -> None:
+        email = Email(hex_string=None, reference_id=self.reference_id)
         with self.assertRaises(ContactNotFound):
             email.verify_against("something@something.com")
 
     def test_returns_true_when_sent_correct_email(self) -> None:
-        reference_id = ReferenceId(
-            last_four_aadhaar_digits="1234",
-            timestamp=datetime(year=1996, month=4, day=25),
+        email = Email(
+            hex_string=self.hex_string,
+            reference_id=self.reference_id,
         )
-        email = Email(hex_string="hjakhskdh12hj123", reference_id=reference_id)
         self.assertEqual(True, email.verify_against("something@something.com"))
+
+    def test_returns_false_when_sent_incorrect_email(self) -> None:
+        email = Email(
+            hex_string=self.hex_string,
+            reference_id=self.reference_id,
+        )
+        self.assertEqual(False, email.verify_against("something@somethin.com"))
 
 
 class TestSecureQRCodeScannedInteger(TestCase):

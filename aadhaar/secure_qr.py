@@ -68,7 +68,10 @@ class Email(ContactABC):
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
             raise ContactNotFound("Email not found in the provided data.")
-        return True
+        return self.hex_string == generate_sha256_hexdigest(
+            contact,
+            int(self._reference_id.last_four_aadhaar_digits[3]),
+        )
 
 
 @dataclass(frozen=True)
