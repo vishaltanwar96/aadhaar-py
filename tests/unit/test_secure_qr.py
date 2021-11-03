@@ -11,16 +11,45 @@ from aadhaar.secure_qr import EmailMobileIndicator
 from aadhaar.secure_qr import ExtractedTextData
 from aadhaar.secure_qr import Gender
 from aadhaar.secure_qr import MalformedDataReceived
+from aadhaar.secure_qr import NumberOutOfRangeException
 from aadhaar.secure_qr import ReferenceId
 from aadhaar.secure_qr import SecureQRCodeScannedInteger
 from aadhaar.secure_qr import SecureQRCompressedBytesData
 from aadhaar.secure_qr import SecureQRDataExtractor
+from aadhaar.secure_qr import generate_sha256_hexdigest
 
 
 def _resolve_test_data_directory_path() -> pathlib.PurePath:
     current_file = pathlib.Path(__file__).resolve()
     project_root = current_file.parent.parent.parent
     return project_root / "test_data"
+
+
+class TestGenerateSha256Hexdigest(TestCase):
+    def setUp(self) -> None:
+        self.expected_hex_string = (
+            "8017a7945e04e42e3d599bb1742ba7b251a8173e7614796405956296c016be3a"
+        )
+        self.given_email = "something@something.com"
+
+    def test_returns_expected_string_when_given_correct_inputs(self) -> None:
+        self.assertEqual(
+            self.expected_hex_string,
+            generate_sha256_hexdigest(self.given_email, 3),
+        )
+
+    def test_doesnt_return_expected_string_when_given_incorrect_inputs(self) -> None:
+        self.assertNotEqual(
+            self.expected_hex_string,
+            generate_sha256_hexdigest(self.given_email, 2),
+        )
+
+    def test_raises_exception_when_given_illegal_input(self) -> None:
+        with self.assertRaises(NumberOutOfRangeException):
+            self.assertNotEqual(
+                self.expected_hex_string,
+                generate_sha256_hexdigest(self.given_email, 10),
+            )
 
 
 class TestEmail(TestCase):

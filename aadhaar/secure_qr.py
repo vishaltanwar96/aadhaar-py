@@ -5,6 +5,7 @@ from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
+from hashlib import sha256
 from io import BytesIO
 from typing import Optional
 
@@ -17,6 +18,21 @@ class MalformedDataReceived(Exception):
 
 class ContactNotFound(Exception):
     pass
+
+
+class NumberOutOfRangeException(Exception):
+    pass
+
+
+def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
+    if number_of_times not in range(0, 10):
+        raise NumberOutOfRangeException("Number can be in range 0-9")
+    digest_string = input_string
+    if number_of_times == 0:
+        number_of_times = 1
+    for _ in range(number_of_times):
+        digest_string = sha256(digest_string.encode("ISO-8859-1")).hexdigest()
+    return digest_string
 
 
 class Gender(Enum):
