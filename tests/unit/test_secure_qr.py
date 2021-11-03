@@ -237,3 +237,6 @@ class TestExtractData(TestCase):
             "1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a"
         )
         self.assertEqual(expected_mobile_hash, self.extract_data._extract_mobile_hash())
+
+    def test_returns_none_when_email_is_extracted(self) -> None:
+        self.assertEqual(None, self.extract_data._extract_email_hash())
