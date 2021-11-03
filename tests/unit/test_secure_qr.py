@@ -137,3 +137,6 @@ class TestExtractData(TestCase):
             actual_image.save(output, format="JPEG")
             actual_image_bytes = output.getvalue()
         self.assertEqual(expected_image_bytes, actual_image_bytes)
+
+    def test_returns_expected_email_hash_value(self) -> None:
+        self.assertEqual(None, self.extract_data._extract_email_hash())

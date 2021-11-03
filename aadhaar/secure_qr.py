@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
 from io import BytesIO
+from typing import Optional
 
 from PIL import Image
 
@@ -188,3 +189,16 @@ class SecureQRDataExtractor:
         else:
             length_to_subtract = 32 * 0
         return length_to_subtract
+
+    def _extract_email_hash(self) -> Optional[str]:
+        data_length = len(self._data)
+        email_mobile_indicator = self._get_email_mobile_indicator()
+        if (
+            email_mobile_indicator is EmailMobileIndicator.EMAIL_MOBILE_BOTH_PRESENT
+        ) or (
+            email_mobile_indicator is EmailMobileIndicator.EMAIL_PRESENT_MOBILE_ABSENT
+        ):
+            return self._data[
+                data_length - 256 - 32 - 32 : data_length - 256 - 32
+            ].hex()
+        return None
