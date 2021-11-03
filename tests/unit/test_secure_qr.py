@@ -1,8 +1,9 @@
 import pathlib
 import pickle
 from datetime import datetime
-from io import BytesIO
 from unittest import TestCase
+
+from PIL import Image
 
 from aadhaar.secure_qr import Address
 from aadhaar.secure_qr import ContactNotFound
@@ -218,16 +219,9 @@ class TestExtractData(TestCase):
         self.assertEqual(expected_text_data, self.extract_data._make_text_data())
 
     def test_returns_expected_image(self) -> None:
-        with open(
-            self._prepare_test_aadhaar_image_path().as_posix(),
-            "rb",
-        ) as expected_image:
-            expected_image_bytes = expected_image.read()
-        actual_image = self.extract_data._extract_aadhaar_image()
-        with BytesIO() as output:
-            actual_image.save(output, format="JPEG")
-            actual_image_bytes = output.getvalue()
-        self.assertEqual(expected_image_bytes, actual_image_bytes)
+        expected_image = Image.open(self._prepare_test_aadhaar_image_path().as_posix())
+        actual_image = self.extract_data._make_aadhaar_image()
+        self.assertEqual(expected_image, actual_image)
 
     def test_returns_expected_email_hash_value(self) -> None:
         self.assertEqual(None, self.extract_data._extract_email_hash())

@@ -221,13 +221,25 @@ class SecureQRDataExtractor:
             previous = index_position + 1
         return raw_extracted_data
 
-    def _extract_aadhaar_image(self) -> Image.Image:
+    def _make_aadhaar_image(self) -> Image.Image:
+        image_bytes = self._extract_aadhaar_image_data()
+        img = Image.open(BytesIO(image_bytes))
+        return self._convert_to_jpeg(img)
+
+    def _extract_aadhaar_image_data(self):
         ending = len(self._data) - 256
         length_to_subtract = self._calculate_length_to_subtract()
         image_bytes = self._data[
             self._find_indexes_of_255_delimiters()[15] + 1 : ending - length_to_subtract
         ]
-        return Image.open(BytesIO(image_bytes))
+        return image_bytes
+
+    @staticmethod
+    def _convert_to_jpeg(img: Image.Image) -> Image.Image:
+        with BytesIO() as output:
+            img.save(output, format="JPEG")
+            bytes_data = output.getvalue()
+        return Image.open(BytesIO(bytes_data))
 
     def _calculate_length_to_subtract(self) -> int:
         email_mobile_indicator_bit = self._get_email_mobile_indicator()
