@@ -202,3 +202,14 @@ class SecureQRDataExtractor:
                 data_length - 256 - 32 - 32 : data_length - 256 - 32
             ].hex()
         return None
+
+    def _extract_mobile_hash(self) -> Optional[str]:
+        data_length = len(self._data)
+        email_mobile_indicator = self._get_email_mobile_indicator()
+        if (
+            email_mobile_indicator is EmailMobileIndicator.EMAIL_MOBILE_BOTH_PRESENT
+        ) or (
+            email_mobile_indicator is EmailMobileIndicator.EMAIL_ABSENT_MOBILE_PRESENT
+        ):
+            return self._data[data_length - 256 - 32 : data_length - 256].hex()
+        return None
