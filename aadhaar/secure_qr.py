@@ -74,6 +74,20 @@ class Email(ContactABC):
         )
 
 
+class Mobile(ContactABC):
+    def __init__(self, hex_string: Optional[str], reference_id: ReferenceId) -> None:
+        self.hex_string = hex_string
+        self._reference_id = reference_id
+
+    def verify_against(self, contact: str) -> bool:
+        if self.hex_string is None:
+            raise ContactNotFound("Mobile not found in the provided data.")
+        return self.hex_string == generate_sha256_hexdigest(
+            contact,
+            int(self._reference_id.last_four_aadhaar_digits[3]),
+        )
+
+
 @dataclass(frozen=True)
 class Address:
     care_of: str

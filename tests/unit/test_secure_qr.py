@@ -82,6 +82,36 @@ class TestEmail(TestCase):
         self.assertEqual(False, email.verify_against("something@somethin.com"))
 
 
+class TestMobile(TestCase):
+    def setUp(self) -> None:
+        self.hex_string = (
+            "c4dcfa91ce43be62865a228ced8ced8a5a9812dc0a242433d30487f0f60ba48d"
+        )
+        self.reference_id = ReferenceId(
+            last_four_aadhaar_digits="1234",
+            timestamp=datetime(year=1996, month=4, day=25),
+        )
+
+    def test_raises_exception_when_none_email_is_verified(self) -> None:
+        email = Email(hex_string=None, reference_id=self.reference_id)
+        with self.assertRaises(ContactNotFound):
+            email.verify_against("9876598765")
+
+    def test_returns_true_when_sent_correct_email(self) -> None:
+        email = Email(
+            hex_string=self.hex_string,
+            reference_id=self.reference_id,
+        )
+        self.assertEqual(True, email.verify_against("9876598765"))
+
+    def test_returns_false_when_sent_incorrect_email(self) -> None:
+        email = Email(
+            hex_string=self.hex_string,
+            reference_id=self.reference_id,
+        )
+        self.assertEqual(False, email.verify_against("9876598766"))
+
+
 class TestSecureQRCodeScannedInteger(TestCase):
     def setUp(self) -> None:
         data = 12345
