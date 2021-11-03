@@ -172,7 +172,7 @@ class SecureQRDataExtractor:
         ]
         return Image.open(BytesIO(image_bytes))
 
-    def _calculate_length_to_subtract(self):
+    def _calculate_length_to_subtract(self) -> int:
         email_mobile_indicator_bit = self._get_email_mobile_indicator()
 
         if email_mobile_indicator_bit is EmailMobileIndicator.EMAIL_MOBILE_BOTH_PRESENT:
