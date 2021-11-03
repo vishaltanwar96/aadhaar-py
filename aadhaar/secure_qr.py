@@ -1,5 +1,7 @@
 import re
 import zlib
+from abc import ABC
+from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
 from enum import Enum
@@ -10,6 +12,10 @@ from PIL import Image
 
 
 class MalformedDataReceived(Exception):
+    pass
+
+
+class ContactNotFound(Exception):
     pass
 
 
@@ -30,6 +36,23 @@ class EmailMobileIndicator(Enum):
 class ReferenceId:
     last_four_aadhaar_digits: str
     timestamp: datetime
+
+
+class ContactABC(ABC):
+    @abstractmethod
+    def verify_against(self, contact: str) -> bool:
+        pass
+
+
+class Email(ContactABC):
+    def __init__(self, hex_string: Optional[str], reference_id: ReferenceId) -> None:
+        self.hex_string = hex_string
+        self._reference_id = reference_id
+
+    def verify_against(self, contact: str) -> bool:
+        if self.hex_string is None:
+            raise ContactNotFound("Email not found in the provided data.")
+        return True
 
 
 @dataclass(frozen=True)

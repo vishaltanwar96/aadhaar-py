@@ -5,6 +5,8 @@ from io import BytesIO
 from unittest import TestCase
 
 from aadhaar.secure_qr import Address
+from aadhaar.secure_qr import ContactNotFound
+from aadhaar.secure_qr import Email
 from aadhaar.secure_qr import EmailMobileIndicator
 from aadhaar.secure_qr import ExtractedTextData
 from aadhaar.secure_qr import Gender
@@ -19,6 +21,25 @@ def _resolve_test_data_directory_path() -> pathlib.PurePath:
     current_file = pathlib.Path(__file__).resolve()
     project_root = current_file.parent.parent.parent
     return project_root / "test_data"
+
+
+class TestEmail(TestCase):
+    def test_raises_exception_when_none_email_is_verified(self) -> None:
+        reference_id = ReferenceId(
+            last_four_aadhaar_digits="1234",
+            timestamp=datetime(year=1996, month=4, day=25),
+        )
+        email = Email(hex_string=None, reference_id=reference_id)
+        with self.assertRaises(ContactNotFound):
+            email.verify_against("something@something.com")
+
+    def test_returns_true_when_sent_correct_email(self) -> None:
+        reference_id = ReferenceId(
+            last_four_aadhaar_digits="1234",
+            timestamp=datetime(year=1996, month=4, day=25),
+        )
+        email = Email(hex_string="hjakhskdh12hj123", reference_id=reference_id)
+        self.assertEqual(True, email.verify_against("something@something.com"))
 
 
 class TestSecureQRCodeScannedInteger(TestCase):
