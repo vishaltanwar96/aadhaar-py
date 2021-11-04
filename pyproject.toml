@@ -7,15 +7,19 @@ license = "MIT"
 
 [tool.poetry.dependencies]
 python = "^3.9"
+Pillow = "^8.4.0"
+types-Pillow = "^8.3.7"
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"
 isort = "^5.9.3"
 mypy = "^0.910"
 flake8 = "^4.0.1"
+add-trailing-comma = "^2.2.0"
 
 [tool.isort]
 profile = "black"
+force_single_line = true
 
 [tool.black]
 line-length = 88
@@ -27,6 +31,7 @@ python_version = "3.9"
 warn_return_any = true
 warn_unused_configs = true
 files = "aadhaar/,tests/"
+disallow_untyped_defs = true
 
 
 [build-system]

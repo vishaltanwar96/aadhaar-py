@@ -2,3 +2,4 @@
 max-line-length = 88
 show-source = True
 extend-exclude = venv/,env/
+extend-ignore = E203

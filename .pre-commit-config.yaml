@@ -9,6 +9,8 @@ repos:
         name: Trim Trailing Whitespace
       - id: end-of-file-fixer
         name: Add Newline at EOF
+      - id: debug-statements
+        name: Check for Breakpoint function calls
   - repo: https://github.com/asottile/add-trailing-comma
     rev: v2.1.0
     hooks:
@@ -18,10 +20,6 @@ repos:
     hooks:
       - id: isort
         name: isort (Python)
-        args: ["--profile", "black", "--filter-files"]
-      - id: isort
-        name: isort (pyi)
-        types: [pyi]
   - repo: https://github.com/psf/black
     rev: 21.9b0
     hooks:
