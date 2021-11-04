@@ -60,31 +60,31 @@ class ContactABC(ABC):
         pass
 
 
+@dataclass(frozen=True)
 class Email(ContactABC):
-    def __init__(self, hex_string: Optional[str], reference_id: ReferenceId) -> None:
-        self.hex_string = hex_string
-        self._reference_id = reference_id
+    hex_string: Optional[str]
+    reference_id: ReferenceId
 
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
             raise ContactNotFound("Email not found in the provided data.")
         return self.hex_string == generate_sha256_hexdigest(
             contact,
-            int(self._reference_id.last_four_aadhaar_digits[3]),
+            int(self.reference_id.last_four_aadhaar_digits[3]),
         )
 
 
+@dataclass(frozen=True)
 class Mobile(ContactABC):
-    def __init__(self, hex_string: Optional[str], reference_id: ReferenceId) -> None:
-        self.hex_string = hex_string
-        self._reference_id = reference_id
+    hex_string: Optional[str]
+    reference_id: ReferenceId
 
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
             raise ContactNotFound("Mobile not found in the provided data.")
         return self.hex_string == generate_sha256_hexdigest(
             contact,
-            int(self._reference_id.last_four_aadhaar_digits[3]),
+            int(self.reference_id.last_four_aadhaar_digits[3]),
         )
 
 
@@ -303,3 +303,19 @@ class SecureQRDataExtractor:
             Email(self._extract_email_hash(), reference_id=reference_id),
             Mobile(self._extract_mobile_hash(), reference_id=reference_id),
         )
+
+    def extract(self) -> ExtractedSecureQRData:
+        return ExtractedSecureQRData(
+            text_data=self._make_text_data(),
+            image=self._make_aadhaar_image(),
+            contact_info=self._make_contact_data(),
+        )
+
+
+def extract_from_aadhaar(data: int) -> ExtractedSecureQRData:
+    scanned_integer = SecureQRCodeScannedInteger(data)
+    integer_to_bytes = scanned_integer.convert_to_bytes()
+    compressed_bytes = SecureQRCompressedBytesData(integer_to_bytes)
+    decompressed_bytes = compressed_bytes.decompress()
+    data_extractor = SecureQRDataExtractor(decompressed_bytes)
+    return data_extractor.extract()
