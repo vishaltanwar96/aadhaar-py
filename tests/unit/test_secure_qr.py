@@ -6,12 +6,14 @@ from unittest import TestCase
 from PIL import Image
 
 from aadhaar.secure_qr import Address
+from aadhaar.secure_qr import ContactData
 from aadhaar.secure_qr import ContactNotFound
 from aadhaar.secure_qr import Email
 from aadhaar.secure_qr import EmailMobileIndicator
 from aadhaar.secure_qr import ExtractedTextData
 from aadhaar.secure_qr import Gender
 from aadhaar.secure_qr import MalformedDataReceived
+from aadhaar.secure_qr import Mobile
 from aadhaar.secure_qr import NumberOutOfRangeException
 from aadhaar.secure_qr import ReferenceId
 from aadhaar.secure_qr import SecureQRCodeScannedInteger
@@ -234,3 +236,17 @@ class TestExtractData(TestCase):
 
     def test_returns_none_when_email_is_extracted(self) -> None:
         self.assertEqual(None, self.extract_data._extract_email_hash())
+
+    def _test_returns_expected_contact_data(self) -> None:
+        reference_id = ReferenceId(
+            last_four_aadhaar_digits="8908",
+            timestamp=datetime.strptime("20190305150137123", "%Y%m%d%H%M%S%f"),
+        )
+        contact_data = ContactData(
+            Email(None, reference_id=reference_id),
+            Mobile(
+                "1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a",
+                reference_id=reference_id,
+            ),
+        )
+        self.assertEqual(contact_data, self.extract_data._make_contact_data())

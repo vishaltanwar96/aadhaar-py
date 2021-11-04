@@ -112,6 +112,19 @@ class ExtractedTextData:
     address: Address
 
 
+@dataclass(frozen=True)
+class ContactData:
+    email: Email
+    mobile: Mobile
+
+
+@dataclass(frozen=True)
+class ExtractedSecureQRData:
+    text_data: ExtractedTextData
+    image: Image.Image
+    contact_info: ContactData
+
+
 class SecureQRCodeScannedInteger:
     def __init__(self, data: int) -> None:
         self._data = data
@@ -127,7 +140,7 @@ class SecureQRCompressedBytesData:
     def _remove_null_bytes_from_left(self) -> bytes:
         return self._data.lstrip(b"\x00")
 
-    def decompress(self):
+    def decompress(self) -> bytes:
         bytes_data = self._remove_null_bytes_from_left()
         try:
             decompressed_bytes_data = zlib.decompress(
@@ -226,7 +239,7 @@ class SecureQRDataExtractor:
         img = Image.open(BytesIO(image_bytes))
         return self._convert_to_jpeg(img)
 
-    def _extract_aadhaar_image_data(self):
+    def _extract_aadhaar_image_data(self) -> bytes:
         ending = len(self._data) - 256
         length_to_subtract = self._calculate_length_to_subtract()
         image_bytes = self._data[
@@ -281,3 +294,12 @@ class SecureQRDataExtractor:
         ):
             return self._data[data_length - 256 - 32 : data_length - 256].hex()
         return None
+
+    def _make_contact_data(self) -> ContactData:
+        indexes = self._find_indexes_of_255_delimiters()
+        extracted_text_data = self._extract_text_data(indexes[1:])
+        reference_id = self._make_reference_id(extracted_text_data["reference_id"])
+        return ContactData(
+            Email(self._extract_email_hash(), reference_id=reference_id),
+            Mobile(self._extract_mobile_hash(), reference_id=reference_id),
+        )
