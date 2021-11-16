@@ -13,7 +13,7 @@ from aadhaar.secure_qr import Gender
 from aadhaar.secure_qr import MalformedDataReceived
 from aadhaar.secure_qr import Mobile
 from aadhaar.secure_qr import ReferenceId
-from aadhaar.secure_qr import extract_from_aadhaar
+from aadhaar.secure_qr import extract_data_from_secure_qr
 
 
 def _resolve_test_data_directory_path() -> pathlib.PurePath:
@@ -72,15 +72,15 @@ class TestExtractFromAadhaar(TestCase):
         )
         self.assertEqual(
             expected_data,
-            extract_from_aadhaar(self._prepare_test_qr_code_integer_data()),
+            extract_data_from_secure_qr(self._prepare_test_qr_code_integer_data()),
         )
 
     def test_raises_malformed_data_received_exception_when_given_bad_input(
         self,
     ) -> None:
         with self.assertRaises(MalformedDataReceived):
-            extract_from_aadhaar(12343453)
+            extract_data_from_secure_qr(12343453)
 
     def test_raises_attribute_error_when_given_str_input(self) -> None:
         with self.assertRaises(AttributeError):
-            extract_from_aadhaar("12343453")  # type: ignore
+            extract_data_from_secure_qr("12343453")  # type: ignore
