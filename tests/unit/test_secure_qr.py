@@ -237,7 +237,7 @@ class TestExtractData(TestCase):
     def test_returns_none_when_email_is_extracted(self) -> None:
         self.assertEqual(None, self.extract_data._extract_email_hash())
 
-    def _test_returns_expected_contact_data(self) -> None:
+    def test_returns_expected_contact_data(self) -> None:
         reference_id = ReferenceId(
             last_four_aadhaar_digits="8908",
             timestamp=datetime.strptime("20190305150137123", "%Y%m%d%H%M%S%f"),
