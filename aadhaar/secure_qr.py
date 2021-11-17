@@ -200,8 +200,7 @@ class SecureQRDataExtractor:
         return Gender.TRANSGENDER
 
     def _make_text_data(self) -> ExtractedTextData:
-        indexes = self._find_indexes_of_255_delimiters()
-        extracted_text_data = self._extract_text_data(indexes[1:])
+        extracted_text_data = self._find_indexes_and_extract_text_data()
         return ExtractedTextData(
             name=extracted_text_data["name"],
             reference_id=self._make_reference_id(extracted_text_data["reference_id"]),
@@ -221,6 +220,10 @@ class SecureQRDataExtractor:
                 vtc=extracted_text_data["vtc"],
             ),
         )
+
+    def _find_indexes_and_extract_text_data(self) -> dict[str, str]:
+        indexes = self._find_indexes_of_255_delimiters()
+        return self._extract_text_data(indexes[1:])
 
     def _extract_text_data(self, indexes: list[int]) -> dict[str, str]:
         raw_extracted_data = {}
@@ -295,8 +298,7 @@ class SecureQRDataExtractor:
         return None
 
     def _make_contact_data(self) -> ContactData:
-        indexes = self._find_indexes_of_255_delimiters()
-        extracted_text_data = self._extract_text_data(indexes[1:])
+        extracted_text_data = self._find_indexes_and_extract_text_data()
         reference_id = self._make_reference_id(extracted_text_data["reference_id"])
         return ContactData(
             Email(self._extract_email_hash(), reference_id=reference_id),
