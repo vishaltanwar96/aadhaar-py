@@ -20,12 +20,7 @@ from aadhaar.secure_qr import SecureQRCodeScannedInteger
 from aadhaar.secure_qr import SecureQRCompressedBytesData
 from aadhaar.secure_qr import SecureQRDataExtractor
 from aadhaar.secure_qr import generate_sha256_hexdigest
-
-
-def _resolve_test_data_directory_path() -> pathlib.PurePath:
-    current_file = pathlib.Path(__file__).resolve()
-    project_root = current_file.parent.parent.parent
-    return project_root / "test_data"
+from tests.test_utils import resolve_test_data_directory_path
 
 
 class TestGenerateSha256Hexdigest(TestCase):
@@ -137,7 +132,7 @@ class TestSecureQRCompressedBytesData(TestCase):
 
     def _prepare_test_qr_code_integer_data(self) -> int:
         with open(
-            _resolve_test_data_directory_path() / "secure_qr_sample_integer_data.txt",
+            resolve_test_data_directory_path() / "secure_qr_sample_integer_data.txt",
         ) as sample_data_file:
             sample_data = sample_data_file.read()
         return int(sample_data)
@@ -156,13 +151,13 @@ class TestSecureQRCompressedBytesData(TestCase):
 class TestExtractData(TestCase):
     def _prepare_test_qr_code_bytes_data(self) -> bytes:
         with open(
-            _resolve_test_data_directory_path() / "secure_qr_sample_bytes_data.pickle",
+            resolve_test_data_directory_path() / "secure_qr_sample_bytes_data.pickle",
             "rb",
         ) as sample_data_file:
             return bytes(pickle.load(sample_data_file))
 
     def _prepare_test_aadhaar_image_path(self) -> pathlib.PurePath:
-        return _resolve_test_data_directory_path() / "aadhaar_image.jpeg"
+        return resolve_test_data_directory_path() / "aadhaar_image.jpeg"
 
     def setUp(self) -> None:
         self.sample_bytes_data = self._prepare_test_qr_code_bytes_data()

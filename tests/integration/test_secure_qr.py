@@ -14,24 +14,19 @@ from aadhaar.secure_qr import MalformedDataReceived
 from aadhaar.secure_qr import Mobile
 from aadhaar.secure_qr import ReferenceId
 from aadhaar.secure_qr import extract_data_from_secure_qr
-
-
-def _resolve_test_data_directory_path() -> pathlib.PurePath:
-    current_file = pathlib.Path(__file__).resolve()
-    project_root = current_file.parent.parent.parent
-    return project_root / "test_data"
+from tests.test_utils import resolve_test_data_directory_path
 
 
 class TestExtractFromAadhaar(TestCase):
     def _prepare_test_qr_code_integer_data(self) -> int:
         with open(
-            _resolve_test_data_directory_path() / "secure_qr_sample_integer_data.txt",
+            resolve_test_data_directory_path() / "secure_qr_sample_integer_data.txt",
         ) as sample_data_file:
             sample_data = sample_data_file.read()
         return int(sample_data)
 
     def _prepare_test_aadhaar_image_path(self) -> pathlib.PurePath:
-        return _resolve_test_data_directory_path() / "aadhaar_image.jpeg"
+        return resolve_test_data_directory_path() / "aadhaar_image.jpeg"
 
     def test_returns_expected_data_when_provided_correct_input(self) -> None:
         reference_id = ReferenceId(
