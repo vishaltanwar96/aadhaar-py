@@ -60,14 +60,15 @@ class ContactABC(ABC):
         pass
 
 
-@dataclass(frozen=True)
-class Email(ContactABC):
-    hex_string: Optional[str]
+class ContactMixin:
     reference_id: ReferenceId
+    hex_string: Optional[str]
 
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
-            raise ContactNotFound("Email not found in the provided data.")
+            raise ContactNotFound(
+                f"{self.__class__.__name__} not found in provided data",
+            )
         return self.hex_string == generate_sha256_hexdigest(
             contact,
             int(self.reference_id.last_four_aadhaar_digits[3]),
@@ -75,17 +76,15 @@ class Email(ContactABC):
 
 
 @dataclass(frozen=True)
-class Mobile(ContactABC):
+class Email(ContactMixin, ContactABC):
     hex_string: Optional[str]
     reference_id: ReferenceId
 
-    def verify_against(self, contact: str) -> bool:
-        if self.hex_string is None:
-            raise ContactNotFound("Mobile not found in the provided data.")
-        return self.hex_string == generate_sha256_hexdigest(
-            contact,
-            int(self.reference_id.last_four_aadhaar_digits[3]),
-        )
+
+@dataclass(frozen=True)
+class Mobile(ContactMixin, ContactABC):
+    hex_string: Optional[str]
+    reference_id: ReferenceId
 
 
 @dataclass(frozen=True)
