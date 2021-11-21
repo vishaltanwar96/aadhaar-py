@@ -13,7 +13,7 @@ from aadhaar.secure_qr.extractor import ExtractedSecureQRData
 from aadhaar.secure_qr.extractor import ExtractedTextData
 from aadhaar.secure_qr.extractor import Mobile
 from aadhaar.secure_qr.extractor import ReferenceId
-from aadhaar.secure_qr.extractor import extract_data_from_secure_qr
+from aadhaar.secure_qr.extractor import extract_data
 from tests.test_utils import resolve_test_data_directory_path
 
 
@@ -67,15 +67,15 @@ class TestExtractFromAadhaar(TestCase):
         )
         self.assertEqual(
             expected_data,
-            extract_data_from_secure_qr(self._prepare_test_qr_code_integer_data()),
+            extract_data(self._prepare_test_qr_code_integer_data()),
         )
 
     def test_raises_malformed_data_received_exception_when_given_bad_input(
         self,
     ) -> None:
         with self.assertRaises(MalformedDataReceived):
-            extract_data_from_secure_qr(12343453)
+            extract_data(12343453)
 
     def test_raises_attribute_error_when_given_str_input(self) -> None:
         with self.assertRaises(AttributeError):
-            extract_data_from_secure_qr("12343453")  # type: ignore
+            extract_data("12343453")  # type: ignore

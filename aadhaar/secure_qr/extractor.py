@@ -293,7 +293,7 @@ class SecureQRDataExtractor:
         )
 
 
-def extract_data_from_secure_qr(data: int) -> ExtractedSecureQRData:
+def extract_data(data: int) -> ExtractedSecureQRData:
     scanned_integer = SecureQRCodeScannedInteger(data)
     integer_to_bytes = scanned_integer.convert_to_bytes()
     compressed_bytes = SecureQRCompressedBytesData(integer_to_bytes)
