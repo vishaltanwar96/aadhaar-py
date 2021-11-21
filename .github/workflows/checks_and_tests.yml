@@ -53,6 +53,6 @@ jobs:
       - name: Install Project Dependencies
         run: poetry install --no-interaction --no-root
       - name: Run Unit Tests
-        run: python -m unittest discover tests/unit
+        run: python -m unittest discover tests/unit --verbose
       - name: Run Integration Tests
-        run: python -m unittest discover tests/integration
+        run: python -m unittest discover tests/integration --verbose
