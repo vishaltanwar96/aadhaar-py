@@ -19,7 +19,7 @@ from aadhaar.secure_qr.extractor import ReferenceId
 from aadhaar.secure_qr.extractor import SecureQRCodeScannedInteger
 from aadhaar.secure_qr.extractor import SecureQRCompressedBytesData
 from aadhaar.secure_qr.extractor import SecureQRDataExtractor
-from aadhaar.secure_qr.extractor import generate_sha256_hexdigest
+from aadhaar.secure_qr.utilities import generate_sha256_hexdigest
 from tests.test_utils import resolve_test_data_directory_path
 
 
