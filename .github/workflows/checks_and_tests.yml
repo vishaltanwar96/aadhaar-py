@@ -1,7 +1,7 @@
 # This workflow will install Python dependencies, run tests and lint with a single version of Python
 # For more information see: https://help.github.com/actions/language-and-framework-guides/using-python-with-github-actions
 
-name: Checks
+name: Quality Checks and Tests
 on:
   push:
   pull_request:
@@ -34,3 +34,25 @@ jobs:
       run: isort . --check --diff
     - name: Flake8 Check
       run: flake8
+
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code Repository
+        uses: actions/checkout@v2
+      - name: Set up Python 3.9
+        uses: actions/setup-python@v2
+        with:
+          python-version: 3.9
+      - name: Install Poetry
+        uses: snok/install-poetry@v1
+        with:
+          version: 1.1.8
+          virtualenvs-create: false
+      - name: Install Project Dependencies
+        run: poetry install --no-interaction --no-root
+      - name: Run Unit Tests
+        run: python -m unittest discover tests/unit --verbose
+      - name: Run Integration Tests
+        run: python -m unittest discover tests/integration --verbose

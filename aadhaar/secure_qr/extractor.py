@@ -4,48 +4,16 @@ from abc import ABC
 from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
-from hashlib import sha256
 from io import BytesIO
 from typing import Optional
 
 from PIL import Image
 
-
-class MalformedDataReceived(Exception):
-    pass
-
-
-class ContactNotFound(Exception):
-    pass
-
-
-class NumberOutOfRangeException(Exception):
-    pass
-
-
-def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
-    if number_of_times not in range(0, 10):
-        raise NumberOutOfRangeException("Number can be in range 0-9")
-    digest_string = input_string
-    if number_of_times == 0:
-        number_of_times = 1
-    for _ in range(number_of_times):
-        digest_string = sha256(digest_string.encode("ISO-8859-1")).hexdigest()
-    return digest_string
-
-
-class Gender(Enum):
-    MALE = "Male"
-    FEMALE = "Female"
-    TRANSGENDER = "Transgender"
-
-
-class EmailMobileIndicator(Enum):
-    EMAIL_MOBILE_BOTH_ABSENT = 0
-    EMAIL_PRESENT_MOBILE_ABSENT = 1
-    EMAIL_ABSENT_MOBILE_PRESENT = 2
-    EMAIL_MOBILE_BOTH_PRESENT = 3
+from aadhaar.secure_qr.enums import EmailMobileIndicator
+from aadhaar.secure_qr.enums import Gender
+from aadhaar.secure_qr.exceptions import ContactNotFound
+from aadhaar.secure_qr.exceptions import MalformedDataReceived
+from aadhaar.secure_qr.utilities import generate_sha256_hexdigest
 
 
 @dataclass(frozen=True)
@@ -60,14 +28,15 @@ class ContactABC(ABC):
         pass
 
 
-@dataclass(frozen=True)
-class Email(ContactABC):
-    hex_string: Optional[str]
+class ContactMixin:
     reference_id: ReferenceId
+    hex_string: Optional[str]
 
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
-            raise ContactNotFound("Email not found in the provided data.")
+            raise ContactNotFound(
+                f"{self.__class__.__name__} not found in provided data",
+            )
         return self.hex_string == generate_sha256_hexdigest(
             contact,
             int(self.reference_id.last_four_aadhaar_digits[3]),
@@ -75,17 +44,15 @@ class Email(ContactABC):
 
 
 @dataclass(frozen=True)
-class Mobile(ContactABC):
+class Email(ContactMixin, ContactABC):
     hex_string: Optional[str]
     reference_id: ReferenceId
 
-    def verify_against(self, contact: str) -> bool:
-        if self.hex_string is None:
-            raise ContactNotFound("Mobile not found in the provided data.")
-        return self.hex_string == generate_sha256_hexdigest(
-            contact,
-            int(self.reference_id.last_four_aadhaar_digits[3]),
-        )
+
+@dataclass(frozen=True)
+class Mobile(ContactMixin, ContactABC):
+    hex_string: Optional[str]
+    reference_id: ReferenceId
 
 
 @dataclass(frozen=True)
@@ -201,8 +168,7 @@ class SecureQRDataExtractor:
         return Gender.TRANSGENDER
 
     def _make_text_data(self) -> ExtractedTextData:
-        indexes = self._find_indexes_of_255_delimiters()
-        extracted_text_data = self._extract_text_data(indexes[1:])
+        extracted_text_data = self._find_indexes_and_extract_text_data()
         return ExtractedTextData(
             name=extracted_text_data["name"],
             reference_id=self._make_reference_id(extracted_text_data["reference_id"]),
@@ -222,6 +188,10 @@ class SecureQRDataExtractor:
                 vtc=extracted_text_data["vtc"],
             ),
         )
+
+    def _find_indexes_and_extract_text_data(self) -> dict[str, str]:
+        indexes = self._find_indexes_of_255_delimiters()
+        return self._extract_text_data(indexes[1:])
 
     def _extract_text_data(self, indexes: list[int]) -> dict[str, str]:
         raw_extracted_data = {}
@@ -296,8 +266,7 @@ class SecureQRDataExtractor:
         return None
 
     def _make_contact_data(self) -> ContactData:
-        indexes = self._find_indexes_of_255_delimiters()
-        extracted_text_data = self._extract_text_data(indexes[1:])
+        extracted_text_data = self._find_indexes_and_extract_text_data()
         reference_id = self._make_reference_id(extracted_text_data["reference_id"])
         return ContactData(
             Email(self._extract_email_hash(), reference_id=reference_id),
@@ -312,7 +281,7 @@ class SecureQRDataExtractor:
         )
 
 
-def extract_from_aadhaar(data: int) -> ExtractedSecureQRData:
+def extract_data(data: int) -> ExtractedSecureQRData:
     scanned_integer = SecureQRCodeScannedInteger(data)
     integer_to_bytes = scanned_integer.convert_to_bytes()
     compressed_bytes = SecureQRCompressedBytesData(integer_to_bytes)
