@@ -5,21 +5,21 @@ from unittest import TestCase
 
 from PIL import Image
 
-from aadhaar.secure_qr import Address
-from aadhaar.secure_qr import ContactData
-from aadhaar.secure_qr import ContactNotFound
-from aadhaar.secure_qr import Email
-from aadhaar.secure_qr import EmailMobileIndicator
-from aadhaar.secure_qr import ExtractedTextData
-from aadhaar.secure_qr import Gender
-from aadhaar.secure_qr import MalformedDataReceived
-from aadhaar.secure_qr import Mobile
-from aadhaar.secure_qr import NumberOutOfRangeException
-from aadhaar.secure_qr import ReferenceId
-from aadhaar.secure_qr import SecureQRCodeScannedInteger
-from aadhaar.secure_qr import SecureQRCompressedBytesData
-from aadhaar.secure_qr import SecureQRDataExtractor
-from aadhaar.secure_qr import generate_sha256_hexdigest
+from aadhaar.secure_qr.enums import EmailMobileIndicator
+from aadhaar.secure_qr.enums import Gender
+from aadhaar.secure_qr.exceptions import ContactNotFound
+from aadhaar.secure_qr.exceptions import MalformedDataReceived
+from aadhaar.secure_qr.exceptions import NumberOutOfRangeException
+from aadhaar.secure_qr.extractor import Address
+from aadhaar.secure_qr.extractor import ContactData
+from aadhaar.secure_qr.extractor import Email
+from aadhaar.secure_qr.extractor import ExtractedTextData
+from aadhaar.secure_qr.extractor import Mobile
+from aadhaar.secure_qr.extractor import ReferenceId
+from aadhaar.secure_qr.extractor import SecureQRCodeScannedInteger
+from aadhaar.secure_qr.extractor import SecureQRCompressedBytesData
+from aadhaar.secure_qr.extractor import SecureQRDataExtractor
+from aadhaar.secure_qr.extractor import generate_sha256_hexdigest
 from tests.test_utils import resolve_test_data_directory_path
 
 

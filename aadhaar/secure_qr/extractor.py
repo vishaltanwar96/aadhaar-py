@@ -4,24 +4,17 @@ from abc import ABC
 from abc import abstractmethod
 from dataclasses import dataclass
 from datetime import datetime
-from enum import Enum
 from hashlib import sha256
 from io import BytesIO
 from typing import Optional
 
 from PIL import Image
 
-
-class MalformedDataReceived(Exception):
-    pass
-
-
-class ContactNotFound(Exception):
-    pass
-
-
-class NumberOutOfRangeException(Exception):
-    pass
+from aadhaar.secure_qr.enums import EmailMobileIndicator
+from aadhaar.secure_qr.enums import Gender
+from aadhaar.secure_qr.exceptions import ContactNotFound
+from aadhaar.secure_qr.exceptions import MalformedDataReceived
+from aadhaar.secure_qr.exceptions import NumberOutOfRangeException
 
 
 def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
@@ -33,19 +26,6 @@ def generate_sha256_hexdigest(input_string: str, number_of_times: int) -> str:
     for _ in range(number_of_times):
         digest_string = sha256(digest_string.encode("ISO-8859-1")).hexdigest()
     return digest_string
-
-
-class Gender(Enum):
-    MALE = "Male"
-    FEMALE = "Female"
-    TRANSGENDER = "Transgender"
-
-
-class EmailMobileIndicator(Enum):
-    EMAIL_MOBILE_BOTH_ABSENT = 0
-    EMAIL_PRESENT_MOBILE_ABSENT = 1
-    EMAIL_ABSENT_MOBILE_PRESENT = 2
-    EMAIL_MOBILE_BOTH_PRESENT = 3
 
 
 @dataclass(frozen=True)
