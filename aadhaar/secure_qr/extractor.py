@@ -3,6 +3,7 @@ import zlib
 from abc import ABC
 from abc import abstractmethod
 from dataclasses import dataclass
+from datetime import date
 from datetime import datetime
 from io import BytesIO
 from typing import Optional
@@ -29,8 +30,8 @@ class ContactABC(ABC):
 
 
 class ContactMixin:
-    reference_id: ReferenceId
     hex_string: Optional[str]
+    fourth_aadhaar_digit: str
 
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
@@ -39,20 +40,20 @@ class ContactMixin:
             )
         return self.hex_string == generate_sha256_hexdigest(
             contact,
-            int(self.reference_id.last_four_aadhaar_digits[3]),
+            int(self.fourth_aadhaar_digit),
         )
 
 
 @dataclass(frozen=True)
 class Email(ContactMixin, ContactABC):
     hex_string: Optional[str]
-    reference_id: ReferenceId
+    fourth_aadhaar_digit: str
 
 
 @dataclass(frozen=True)
 class Mobile(ContactMixin, ContactABC):
     hex_string: Optional[str]
-    reference_id: ReferenceId
+    fourth_aadhaar_digit: str
 
 
 @dataclass(frozen=True)
@@ -74,7 +75,7 @@ class Address:
 class ExtractedTextData:
     reference_id: ReferenceId
     name: str
-    date_of_birth: datetime
+    date_of_birth: date
     gender: Gender
     address: Address
 
@@ -173,7 +174,10 @@ class SecureQRDataExtractor:
             name=extracted_text_data["name"],
             reference_id=self._make_reference_id(extracted_text_data["reference_id"]),
             gender=self._select_gender(extracted_text_data["gender"]),
-            date_of_birth=datetime.strptime(extracted_text_data["dob"], "%d-%m-%Y"),
+            date_of_birth=datetime.strptime(
+                extracted_text_data["dob"],
+                "%d-%m-%Y",
+            ).date(),
             address=Address(
                 care_of=extracted_text_data["care_of"],
                 district=extracted_text_data["district"],
@@ -267,10 +271,9 @@ class SecureQRDataExtractor:
 
     def _make_contact_data(self) -> ContactData:
         extracted_text_data = self._find_indexes_and_extract_text_data()
-        reference_id = self._make_reference_id(extracted_text_data["reference_id"])
         return ContactData(
-            Email(self._extract_email_hash(), reference_id=reference_id),
-            Mobile(self._extract_mobile_hash(), reference_id=reference_id),
+            Email(self._extract_email_hash(), extracted_text_data["reference_id"][3]),
+            Mobile(self._extract_mobile_hash(), extracted_text_data["reference_id"][3]),
         )
 
     def extract(self) -> ExtractedSecureQRData:

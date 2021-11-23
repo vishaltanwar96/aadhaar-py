@@ -34,10 +34,10 @@ class TestExtractFromAadhaar(TestCase):
             timestamp=datetime.strptime("20190305150137123", "%Y%m%d%H%M%S%f"),
         )
         contact_data = ContactData(
-            Email(None, reference_id=reference_id),
+            Email(None, fourth_aadhaar_digit=reference_id.last_four_aadhaar_digits[3]),
             Mobile(
                 "1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a",
-                reference_id=reference_id,
+                fourth_aadhaar_digit=reference_id.last_four_aadhaar_digits[3],
             ),
         )
         address = Address(
@@ -56,7 +56,7 @@ class TestExtractFromAadhaar(TestCase):
         text_data = ExtractedTextData(
             name="Penumarthi Venkat",
             reference_id=reference_id,
-            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y"),
+            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y").date(),
             gender=Gender.MALE,
             address=address,
         )

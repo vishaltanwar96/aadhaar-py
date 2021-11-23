@@ -55,27 +55,24 @@ class TestEmail(TestCase):
         self.hex_string = (
             "915c062c5211a225ef947ee949a685743684fa05cb3566c6e2306a5a7603eb0e"
         )
-        self.reference_id = ReferenceId(
-            last_four_aadhaar_digits="1234",
-            timestamp=datetime(year=1996, month=4, day=25),
-        )
+        self.fourth_aadhaar_digit = "4"
 
     def test_raises_exception_when_none_email_is_verified(self) -> None:
-        email = Email(hex_string=None, reference_id=self.reference_id)
+        email = Email(hex_string=None, fourth_aadhaar_digit=self.fourth_aadhaar_digit)
         with self.assertRaises(ContactNotFound):
             email.verify_against("something@something.com")
 
     def test_returns_true_when_sent_correct_email(self) -> None:
         email = Email(
             hex_string=self.hex_string,
-            reference_id=self.reference_id,
+            fourth_aadhaar_digit=self.fourth_aadhaar_digit,
         )
         self.assertEqual(True, email.verify_against("something@something.com"))
 
     def test_returns_false_when_sent_incorrect_email(self) -> None:
         email = Email(
             hex_string=self.hex_string,
-            reference_id=self.reference_id,
+            fourth_aadhaar_digit=self.fourth_aadhaar_digit,
         )
         self.assertEqual(False, email.verify_against("something@somethin.com"))
 
@@ -85,27 +82,24 @@ class TestMobile(TestCase):
         self.hex_string = (
             "c4dcfa91ce43be62865a228ced8ced8a5a9812dc0a242433d30487f0f60ba48d"
         )
-        self.reference_id = ReferenceId(
-            last_four_aadhaar_digits="1234",
-            timestamp=datetime(year=1996, month=4, day=25),
-        )
+        self.fourth_aadhaar_digit = "4"
 
     def test_raises_exception_when_none_email_is_verified(self) -> None:
-        email = Email(hex_string=None, reference_id=self.reference_id)
+        email = Email(hex_string=None, fourth_aadhaar_digit=self.fourth_aadhaar_digit)
         with self.assertRaises(ContactNotFound):
             email.verify_against("9876598765")
 
     def test_returns_true_when_sent_correct_email(self) -> None:
         email = Email(
             hex_string=self.hex_string,
-            reference_id=self.reference_id,
+            fourth_aadhaar_digit=self.fourth_aadhaar_digit,
         )
         self.assertEqual(True, email.verify_against("9876598765"))
 
     def test_returns_false_when_sent_incorrect_email(self) -> None:
         email = Email(
             hex_string=self.hex_string,
-            reference_id=self.reference_id,
+            fourth_aadhaar_digit=self.fourth_aadhaar_digit,
         )
         self.assertEqual(False, email.verify_against("9876598766"))
 
@@ -209,7 +203,7 @@ class TestExtractData(TestCase):
         expected_text_data = ExtractedTextData(
             name="Penumarthi Venkat",
             reference_id=reference_id,
-            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y"),
+            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y").date(),
             gender=Gender.MALE,
             address=address,
         )
@@ -233,15 +227,12 @@ class TestExtractData(TestCase):
         self.assertEqual(None, self.extract_data._extract_email_hash())
 
     def test_returns_expected_contact_data(self) -> None:
-        reference_id = ReferenceId(
-            last_four_aadhaar_digits="8908",
-            timestamp=datetime.strptime("20190305150137123", "%Y%m%d%H%M%S%f"),
-        )
+        fourth_aadhaar_digit = "8"
         contact_data = ContactData(
-            Email(None, reference_id=reference_id),
+            Email(None, fourth_aadhaar_digit=fourth_aadhaar_digit),
             Mobile(
                 "1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a",
-                reference_id=reference_id,
+                fourth_aadhaar_digit=fourth_aadhaar_digit,
             ),
         )
         self.assertEqual(contact_data, self.extract_data._make_contact_data())
