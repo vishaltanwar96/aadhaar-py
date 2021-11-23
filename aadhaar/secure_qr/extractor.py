@@ -29,8 +29,8 @@ class ContactABC(ABC):
 
 
 class ContactMixin:
-    reference_id: ReferenceId
     hex_string: Optional[str]
+    fourth_aadhaar_digit: str
 
     def verify_against(self, contact: str) -> bool:
         if self.hex_string is None:
@@ -39,20 +39,20 @@ class ContactMixin:
             )
         return self.hex_string == generate_sha256_hexdigest(
             contact,
-            int(self.reference_id.last_four_aadhaar_digits[3]),
+            int(self.fourth_aadhaar_digit),
         )
 
 
 @dataclass(frozen=True)
 class Email(ContactMixin, ContactABC):
     hex_string: Optional[str]
-    reference_id: ReferenceId
+    fourth_aadhaar_digit: str
 
 
 @dataclass(frozen=True)
 class Mobile(ContactMixin, ContactABC):
     hex_string: Optional[str]
-    reference_id: ReferenceId
+    fourth_aadhaar_digit: str
 
 
 @dataclass(frozen=True)
@@ -267,10 +267,9 @@ class SecureQRDataExtractor:
 
     def _make_contact_data(self) -> ContactData:
         extracted_text_data = self._find_indexes_and_extract_text_data()
-        reference_id = self._make_reference_id(extracted_text_data["reference_id"])
         return ContactData(
-            Email(self._extract_email_hash(), reference_id=reference_id),
-            Mobile(self._extract_mobile_hash(), reference_id=reference_id),
+            Email(self._extract_email_hash(), extracted_text_data["reference_id"][3]),
+            Mobile(self._extract_mobile_hash(), extracted_text_data["reference_id"][3]),
         )
 
     def extract(self) -> ExtractedSecureQRData:
