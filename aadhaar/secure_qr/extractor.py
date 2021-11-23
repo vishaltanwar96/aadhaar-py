@@ -3,6 +3,7 @@ import zlib
 from abc import ABC
 from abc import abstractmethod
 from dataclasses import dataclass
+from datetime import date
 from datetime import datetime
 from io import BytesIO
 from typing import Optional
@@ -74,7 +75,7 @@ class Address:
 class ExtractedTextData:
     reference_id: ReferenceId
     name: str
-    date_of_birth: datetime
+    date_of_birth: date
     gender: Gender
     address: Address
 
@@ -173,7 +174,10 @@ class SecureQRDataExtractor:
             name=extracted_text_data["name"],
             reference_id=self._make_reference_id(extracted_text_data["reference_id"]),
             gender=self._select_gender(extracted_text_data["gender"]),
-            date_of_birth=datetime.strptime(extracted_text_data["dob"], "%d-%m-%Y"),
+            date_of_birth=datetime.strptime(
+                extracted_text_data["dob"],
+                "%d-%m-%Y",
+            ).date(),
             address=Address(
                 care_of=extracted_text_data["care_of"],
                 district=extracted_text_data["district"],

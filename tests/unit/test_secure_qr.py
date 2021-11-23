@@ -203,7 +203,7 @@ class TestExtractData(TestCase):
         expected_text_data = ExtractedTextData(
             name="Penumarthi Venkat",
             reference_id=reference_id,
-            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y"),
+            date_of_birth=datetime.strptime("07-05-1987", "%d-%m-%Y").date(),
             gender=Gender.MALE,
             address=address,
         )
