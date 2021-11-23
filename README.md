@@ -22,7 +22,7 @@ class ExtractedSecureQRData:
 
 # Text Data
 >>> extracted_data.text_data
-ExtractedTextData(reference_id=ReferenceId(last_four_aadhaar_digits='8908', timestamp=datetime.datetime(2019, 3, 5, 15, 1, 37, 123000)), name='Penumarthi Venkat', date_of_birth=datetime.datetime(1987, 5, 7, 0, 0), gender=<Gender.MALE: 'Male'>, address=Address(care_of='S/O: Pattabhi Rama Rao', district='East Godavari', landmark='Near Siva Temple', house='4-83', location='Sctor-2', pin_code='533016', post_office='Aratlakatta', state='Andhra Pradesh', street='Main Road', sub_district='Karapa', vtc='Aratlakatta'))
+ExtractedSecureQRData(text_data=ExtractedTextData(reference_id=ReferenceId(last_four_aadhaar_digits='8908', timestamp=datetime.datetime(2019, 3, 5, 15, 1, 37, 123000)), name='Penumarthi Venkat', date_of_birth=datetime.datetime(1987, 5, 7, 0, 0), gender=<Gender.MALE: 'Male'>, address=Address(care_of='S/O: Pattabhi Rama Rao', district='East Godavari', landmark='Near Siva Temple', house='4-83', location='Sctor-2', pin_code='533016', post_office='Aratlakatta', state='Andhra Pradesh', street='Main Road', sub_district='Karapa', vtc='Aratlakatta')), image=<PIL.JpegImagePlugin.JpegImageFile image mode=RGB size=60x60 at 0x1095B9280>, contact_info=ContactData(email=Email(hex_string=None, fourth_aadhaar_digit='8'), mobile=Mobile(hex_string='1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a', fourth_aadhaar_digit='8')))
 
 # The Embedded Image
 >>> extracted_data.image
@@ -30,7 +30,7 @@ ExtractedTextData(reference_id=ReferenceId(last_four_aadhaar_digits='8908', time
 
 # The Contact Information
 >>> extracted_data.contact_info
-ContactData(email=Email(hex_string=None, reference_id=ReferenceId(last_four_aadhaar_digits='8908', timestamp=datetime.datetime(2019, 3, 5, 15, 1, 37, 123000))), mobile=Mobile(hex_string='1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a', reference_id=ReferenceId(last_four_aadhaar_digits='8908', timestamp=datetime.datetime(2019, 3, 5, 15, 1, 37, 123000))))
+ContactData(email=Email(hex_string=None, fourth_aadhaar_digit='8'), mobile=Mobile(hex_string='1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a', fourth_aadhaar_digit='8'))
 ```
 
 
