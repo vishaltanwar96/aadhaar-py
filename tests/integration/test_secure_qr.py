@@ -1,3 +1,4 @@
+import json
 import pathlib
 from datetime import datetime
 from unittest import TestCase
@@ -79,3 +80,9 @@ class TestExtractFromAadhaar(TestCase):
     def test_raises_attribute_error_when_given_str_input(self) -> None:
         with self.assertRaises(AttributeError):
             extract_data("12343453")  # type: ignore
+
+    def test_returns_expected_extracted_data_using_to_dict(self) -> None:
+        with open(resolve_test_data_directory_path() / "to_dict.json") as to_dict_json:
+            expected_data = json.load(to_dict_json)
+        extracted_data = extract_data(self._prepare_test_qr_code_integer_data())
+        self.assertEqual(expected_data, extracted_data.to_dict())

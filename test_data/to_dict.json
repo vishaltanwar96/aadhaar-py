@@ -1,0 +1,33 @@
+{
+  "text_data": {
+    "reference_id": {
+      "last_four_aadhaar_digits": "8908",
+      "timestamp": "2019-03-05T15:01:37.123000"
+    },
+    "name": "Penumarthi Venkat",
+    "date_of_birth": "1987-05-07",
+    "gender": "Male",
+    "address": {
+      "care_of": "S/O: Pattabhi Rama Rao",
+      "district": "East Godavari",
+      "landmark": "Near Siva Temple",
+      "house": "4-83",
+      "location": "Sctor-2",
+      "pin_code": "533016",
+      "post_office": "Aratlakatta",
+      "state": "Andhra Pradesh",
+      "street": "Main Road",
+      "sub_district": "Karapa",
+      "vtc": "Aratlakatta"
+    }
+  },
+  "image": "data:image/jpeg;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/2wBDAAgGBgcGBQgHBwcJCQgKDBQNDAsLDBkSEw8UHRofHh0aHBwgJC4nICIsIxwcKDcpLDAxNDQ0Hyc5PTgyPC4zNDL/2wBDAQkJCQwLDBgNDRgyIRwhMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjIyMjL/wAARCAA8ADwDASIAAhEBAxEB/8QAHwAAAQUBAQEBAQEAAAAAAAAAAAECAwQFBgcICQoL/8QAtRAAAgEDAwIEAwUFBAQAAAF9AQIDAAQRBRIhMUEGE1FhByJxFDKBkaEII0KxwRVS0fAkM2JyggkKFhcYGRolJicoKSo0NTY3ODk6Q0RFRkdISUpTVFVWV1hZWmNkZWZnaGlqc3R1dnd4eXqDhIWGh4iJipKTlJWWl5iZmqKjpKWmp6ipqrKztLW2t7i5usLDxMXGx8jJytLT1NXW19jZ2uHi4+Tl5ufo6erx8vP09fb3+Pn6/8QAHwEAAwEBAQEBAQEBAQAAAAAAAAECAwQFBgcICQoL/8QAtREAAgECBAQDBAcFBAQAAQJ3AAECAxEEBSExBhJBUQdhcRMiMoEIFEKRobHBCSMzUvAVYnLRChYkNOEl8RcYGRomJygpKjU2Nzg5OkNERUZHSElKU1RVVldYWVpjZGVmZ2hpanN0dXZ3eHl6goOEhYaHiImKkpOUlZaXmJmaoqOkpaanqKmqsrO0tba3uLm6wsPExcbHyMnK0tPU1dbX2Nna4uPk5ebn6Onq8vP09fb3+Pn6/9oADAMBAAIRAxEAPwD1O/8AGdjb+HJdSjwZl+RYSeRIRwPp3z6A9+K8un1G41q5e7uZW+Y5A9K53xLqkv2myhDMkbAkr75xWlBOFjRSygY7mpc7RLhC7uy8sUX3tgJ96iuAGH3Rj0phvIY+rp+BqJ76BhkNXM+Z6nZFLoU54VwcRgCmWX2V5GtruMPDKNpz2FOnvIyCAy49zVMSRysAkiBu3zVKTvc0k1azKUYn8F+J02qJrVyXj3k7ZIzzg47j+lemQ3jXMCTKseHUHPC598VwXiGTz/D0ccyfvbZwyN3x0Iqzod/LNpMPmSt8g2L9B0rpjqjiklcoeKIJXmsZnGQJBG2O2TxWXezyNMweVlA4ULWxczyXFxFbyAgHDk+hB4p1xpcc2QqgN61DmkzaFN8pyRebzCFmkyvUGtuwgmvLRysrrgfeHWpzobl3ld+vLEd619Mtfs9lJtUAEVEqqexrTptPU4bUZJmlMayMG9u9U7cDzihmcOOCa6W7sI3nDDh6ii0h13AEEOcnNEZK2pM4NsWKaeTRLuKeQv5SDY3tnpXpPg3wzJD4XtDcoBLKDIR6AngfliuIjslt9OnR1yCvb6ivZfC97H4g0C3vY7Zk6xtHGw+QqcYP6H6EVaZjKm7nk98PLIkX7xA/Lmoor078nn2q9qds4thLxtHFc4WbzMKSPespR1OmnP3Tanuj5LFUHAyRWMniKUq6BWjTtxTJdTjgBjLknvVF72Bv+WMzfX/9VEYlOb6F221FJ85j/eKcBsdavvOu3PeufW7SMsY8jnkEYx9KuQP5o3DmnKAKatqbXnM2nSkDLAdPxFem/DPTrxvCjSLO8aSXUhRV6YGFP6g15zpGlahqsTxadatcSAgsA6rt7dWIHXivc9Csk0zQrKyZERoYVVgvQtjk/nmmkZSnqeWz2y3EDQv901xF9DJZzGKQFZFBx6EV3w++K5rx4ojt7ORRhvm5/wC+aua1MKcnscnEp3F1jBY9zSTLfHlVwop1tK46GrbzybD8xqL2OyK0Ml4y4/eINw71fsh5UPP4ZquzGQ5Y5NXNOYnVLSIn5DKuR+NO9zKS949p8AaJLpGj/aLpCLi6+cxuuCi9gQeh6k/X2rri5z6e1V7cllVj1PWpqpGE3qf/2Q==",
+  "contact_info": {
+    "email": {
+      "hex_string": null
+    },
+    "mobile": {
+      "hex_string": "1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a"
+    }
+  }
+}

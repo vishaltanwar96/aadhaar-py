@@ -2,11 +2,14 @@ import re
 import zlib
 from abc import ABC
 from abc import abstractmethod
+from base64 import b64encode
+from dataclasses import asdict
 from dataclasses import dataclass
 from datetime import date
 from datetime import datetime
 from io import BytesIO
 from typing import Optional
+from typing import Union
 
 from PIL import Image
 
@@ -16,11 +19,18 @@ from aadhaar.secure_qr.exceptions import ContactNotFound
 from aadhaar.secure_qr.exceptions import MalformedDataReceived
 from aadhaar.secure_qr.utilities import generate_sha256_hexdigest
 
+_SECURE_QR_ENCODING = "ISO-8859-1"
+
 
 @dataclass(frozen=True)
 class ReferenceId:
     last_four_aadhaar_digits: str
     timestamp: datetime
+
+    def to_dict(self) -> dict[str, str]:
+        reference_id_dict = asdict(self)
+        reference_id_dict["timestamp"] = self.timestamp.isoformat()
+        return reference_id_dict
 
 
 class ContactABC(ABC):
@@ -42,6 +52,9 @@ class ContactMixin:
             contact,
             int(self.fourth_aadhaar_digit),
         )
+
+    def to_dict(self) -> dict[str, Optional[str]]:
+        return {"hex_string": self.hex_string}
 
 
 @dataclass(frozen=True)
@@ -79,11 +92,21 @@ class ExtractedTextData:
     gender: Gender
     address: Address
 
+    def to_dict(self) -> dict[str, Union[dict[str, str], str]]:
+        extracted_text_data_dict = asdict(self)
+        extracted_text_data_dict["reference_id"] = self.reference_id.to_dict()
+        extracted_text_data_dict["date_of_birth"] = self.date_of_birth.isoformat()
+        extracted_text_data_dict["gender"] = self.gender.value
+        return extracted_text_data_dict
+
 
 @dataclass(frozen=True)
 class ContactData:
     email: Email
     mobile: Mobile
+
+    def to_dict(self) -> dict[str, dict[str, Optional[str]]]:
+        return {"email": self.email.to_dict(), "mobile": self.mobile.to_dict()}
 
 
 @dataclass(frozen=True)
@@ -91,6 +114,21 @@ class ExtractedSecureQRData:
     text_data: ExtractedTextData
     image: Image.Image
     contact_info: ContactData
+
+    def _img_to_base64(self) -> str:
+        with BytesIO() as output:
+            self.image.save(output, format="JPEG")
+            image_data = output.getvalue()
+        return "data:image/jpeg;base64," + b64encode(image_data).decode(
+            _SECURE_QR_ENCODING,
+        )
+
+    def to_dict(self) -> dict:
+        return {
+            "text_data": self.text_data.to_dict(),
+            "image": self._img_to_base64(),
+            "contact_info": self.contact_info.to_dict(),
+        }
 
 
 class SecureQRCodeScannedInteger:
@@ -125,7 +163,6 @@ class SecureQRCompressedBytesData:
 class SecureQRDataExtractor:
     def __init__(self, data: bytes) -> None:
         self._data = data
-        self._ENCODING_TO_USE = "ISO-8859-1"
         self._details = [
             "reference_id",
             "name",
@@ -145,7 +182,7 @@ class SecureQRDataExtractor:
         ]
 
     def _extract_email_mobile_indicator_bit(self) -> int:
-        return int(self._data[0 : self._data.find(255)].decode(self._ENCODING_TO_USE))
+        return int(self._data[0 : self._data.find(255)].decode(_SECURE_QR_ENCODING))
 
     def _get_email_mobile_indicator(self) -> EmailMobileIndicator:
         return EmailMobileIndicator(self._extract_email_mobile_indicator_bit())
@@ -202,7 +239,7 @@ class SecureQRDataExtractor:
         previous = self._data.find(255) + 1
         for detail, index_position in zip(self._details, indexes):
             extracted_detail = self._data[previous:index_position].decode(
-                self._ENCODING_TO_USE,
+                _SECURE_QR_ENCODING,
             )
             raw_extracted_data[detail] = extracted_detail
             previous = index_position + 1
