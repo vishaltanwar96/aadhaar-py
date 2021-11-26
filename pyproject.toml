@@ -9,6 +9,7 @@ license = "MIT"
 python = "^3.9"
 Pillow = "^8.4.0"
 types-Pillow = "^8.3.7"
+coverage = "^6.1.2"
 
 [tool.poetry.dev-dependencies]
 black = "^21.9b0"
