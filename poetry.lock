@@ -59,7 +59,7 @@ python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*"
 name = "coverage"
 version = "6.1.2"
 description = "Code coverage measurement for Python"
-category = "main"
+category = "dev"
 optional = false
 python-versions = ">=3.6"
 
@@ -221,7 +221,7 @@ python-versions = "*"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "6bee9412f5c9b5c09b77fd65c197d7524a7890fa7ccb8524ed421d6aaa42fc4d"
+content-hash = "45a429440f9b1cd7045d6f93e20972d346ff35313f1f9f8b9aa1a2eecb732b3e"
 
 [metadata.files]
 add-trailing-comma = [
