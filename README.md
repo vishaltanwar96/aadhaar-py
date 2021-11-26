@@ -1,10 +1,10 @@
 # aadhaar-py 🐍
 This library helps you extract the embedded information 💾 in Aadhaar Secure QR Code
 
-# Inspired from
+# Inspired from 😇
 I would like to thank the authors of [pyaadhaar](https://github.com/Tanmoy741127/pyaadhaar). It wouldn't be possible to move into the right direction without this library.
 
-# Demo
+# Demo ✔️
 [Secure Aadhaar QR Decoder](https://aadhaar-secure-qr.herokuapp.com/)
 
 # Enough talk, show me how it works! ✨
@@ -14,7 +14,7 @@ I would like to thank the authors of [pyaadhaar](https://github.com/Tanmoy741127
 >>> extracted_data = extract_data(received_qr_code_data)
 ```
 
-The extract_data returns an instance of ExtractedSecureQRData which has the definition of:
+The `extract_data` function returns an instance of `ExtractedSecureQRData` which has the definition of:
 ```python
 @dataclass(frozen=True)
 class ExtractedSecureQRData:
@@ -42,7 +42,7 @@ The Contact Information 📧:
 ContactData(email=Email(hex_string=None, fourth_aadhaar_digit='8'), mobile=Mobile(hex_string='1f31f19afc2bacbd8afb84526ae4da184a2727e8c2b1b6b9a81e4dc6b74d692a', fourth_aadhaar_digit='8'))
 ```
 
-But hey! 🙄 I want to send this data via a ReSTful API, don't you have something to serialize that ugly instance of ExtractedSecureQRData? 😩
+But hey! 🙄 I want to send this data via a ReSTful API, don't you have something to serialize that ugly instance of `ExtractedSecureQRData`? 😩
 
 `to_dict` method to the rescue 💪
 ```python
@@ -83,7 +83,7 @@ But hey! 🙄 I want to send this data via a ReSTful API, don't you have somethi
 
 ```
 
-# Run Tests
+# Run Tests 🧪
 ```bash
 python -m unittest discover tests/ --verbose
 ```
