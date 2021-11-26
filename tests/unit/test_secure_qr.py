@@ -49,6 +49,12 @@ class TestGenerateSha256Hexdigest(TestCase):
                 generate_sha256_hexdigest(self.given_email, 10),
             )
 
+    def test_raises_exception_when_given_zero_as_input(self) -> None:
+        self.assertEqual(
+            "451d4c79960a9b86df7ee29444d4f6fc4f44feec7f25fad7217bdd1ced9d67c3",
+            generate_sha256_hexdigest(self.given_email, 0),
+        )
+
 
 class TestEmail(TestCase):
     def setUp(self) -> None:
