@@ -1,3 +1,10 @@
+[![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
+[![PyPI pyversions](https://img.shields.io/pypi/pyversions/aadhaar-py?color=purple)](https://pypi.org/project/aadhaar-py/)
+[![PyPI version](https://badge.fury.io/py/aadhaar-py.svg)](https://badge.fury.io/py/aadhaar-py)
+[![MIT license](https://img.shields.io/badge/License-MIT-blue.svg)](https://lbesson.mit-license.org/)
+[![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![codecov](https://codecov.io/gh/vishaltanwar96/aadhaar-py/branch/main/graph/badge.svg?token=JG312MQEEQ)](https://codecov.io/gh/vishaltanwar96/aadhaar-py)
+[![Downloads](https://pepy.tech/badge/aadhaar-py)](https://pepy.tech/project/aadhaar-py)
 # aadhaar-py 🐍
 This library helps you extract the embedded information 💾 in Aadhaar Secure QR Code
 
