@@ -1,6 +1,9 @@
 [tool.poetry]
 name = "aadhaar-py"
-version = "2.0.0"
+packages = [
+    {include = "aadhaar"}
+]
+version = "0.0.0"
 description = "Extract embedded information from Aadhaar Secure QR Code."
 authors = ["Vishal Tanwar <vishal.tanwar@outlook.com>"]
 license = "MIT"
