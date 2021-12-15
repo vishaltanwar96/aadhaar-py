@@ -1,0 +1,19 @@
+name: Build and Publish to PyPI
+on:
+  push:
+    tags:
+      - "v*.*.*"
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build and publish to pypi
+        uses: JRubics/poetry-publish@v1.9
+        with:
+          python_version: "3.9"
+          poetry_version: "1.1.8"
+          pypi_token: ${{ secrets.TEST_PYPI_TOKEN }}
+          ignore_dev_requirements: "yes"
+          repository_name: "aadhaar-py"
+          repository_url: "https://test.pypi.org/project/aadhaar-py/"
