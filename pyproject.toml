@@ -1,9 +1,26 @@
 [tool.poetry]
 name = "aadhaar-py"
-version = "2.0.0"
+packages = [
+    {include = "aadhaar"}
+]
+version = "0.0.0"
 description = "Extract embedded information from Aadhaar Secure QR Code."
 authors = ["Vishal Tanwar <vishal.tanwar@outlook.com>"]
 license = "MIT"
+readme = "README.md"
+repository = "https://github.com/vishaltanwar96/aadhaar-py"
+keywords = ["aadhaar", "secure qr code", "extractor", "qr code", "aadhaar secure qr code"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "License :: OSI Approved :: MIT License",
+    "Intended Audience :: Developers",
+    "Operating System :: POSIX :: Linux",
+    "Programming Language :: Python :: 3.9",
+    "Topic :: Software Development :: Libraries",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+    "Topic :: Utilities",
+    "Typing :: Typed"
+]
 
 [tool.poetry.dependencies]
 python = "^3.9"
