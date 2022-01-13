@@ -24,7 +24,7 @@ classifiers = [
 
 [tool.poetry.dependencies]
 python = "^3.9"
-Pillow = "^8.4.0"
+Pillow = ">=8.4,<10.0"
 types-Pillow = "^8.3.7"
 
 [tool.poetry.dev-dependencies]
