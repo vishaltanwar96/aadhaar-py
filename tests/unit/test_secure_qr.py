@@ -3,8 +3,6 @@ import pickle
 from datetime import datetime
 from unittest import TestCase
 
-from PIL import Image
-
 from aadhaar.secure_qr.enums import EmailMobileIndicator
 from aadhaar.secure_qr.enums import Gender
 from aadhaar.secure_qr.exceptions import ContactNotFound
@@ -157,7 +155,7 @@ class TestExtractData(TestCase):
             return bytes(pickle.load(sample_data_file))
 
     def _prepare_test_aadhaar_image_path(self) -> pathlib.PurePath:
-        return resolve_test_data_directory_path() / "aadhaar_image.jpeg"
+        return resolve_test_data_directory_path() / "aadhaar_image.pickle"
 
     def setUp(self) -> None:
         self.sample_bytes_data = self._prepare_test_qr_code_bytes_data()
@@ -216,8 +214,13 @@ class TestExtractData(TestCase):
         self.assertEqual(expected_text_data, self.extract_data._make_text_data())
 
     def test_returns_expected_image(self) -> None:
-        expected_image = Image.open(self._prepare_test_aadhaar_image_path().as_posix())
+        with open(
+            self._prepare_test_aadhaar_image_path().as_posix(),
+            "rb",
+        ) as pickled_image:
+            expected_image = pickle.load(pickled_image)
         actual_image = self.extract_data._make_aadhaar_image()
+        assert actual_image.tobytes() == expected_image.tobytes()
         self.assertEqual(expected_image, actual_image)
 
     def test_returns_expected_email_hash_value(self) -> None:

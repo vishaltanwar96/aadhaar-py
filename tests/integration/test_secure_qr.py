@@ -1,9 +1,8 @@
 import json
 import pathlib
+import pickle
 from datetime import datetime
 from unittest import TestCase
-
-from PIL import Image
 
 from aadhaar.secure_qr.enums import Gender
 from aadhaar.secure_qr.exceptions import MalformedDataReceived
@@ -27,7 +26,7 @@ class TestExtractFromAadhaar(TestCase):
         return int(sample_data)
 
     def _prepare_test_aadhaar_image_path(self) -> pathlib.PurePath:
-        return resolve_test_data_directory_path() / "aadhaar_image.jpeg"
+        return resolve_test_data_directory_path() / "aadhaar_image.pickle"
 
     def test_returns_expected_data_when_provided_correct_input(self) -> None:
         reference_id = ReferenceId(
@@ -61,14 +60,21 @@ class TestExtractFromAadhaar(TestCase):
             gender=Gender.MALE,
             address=address,
         )
+        with open(
+            self._prepare_test_aadhaar_image_path().as_posix(),
+            "rb",
+        ) as pickled_image:
+            expected_image = pickle.load(pickled_image)
         expected_data = ExtractedSecureQRData(
             contact_info=contact_data,
-            image=Image.open(self._prepare_test_aadhaar_image_path().as_posix()),
+            image=expected_image,
             text_data=text_data,
         )
+        actual_data = extract_data(self._prepare_test_qr_code_integer_data())
+        assert actual_data.image.tobytes() == expected_image.tobytes()
         self.assertEqual(
             expected_data,
-            extract_data(self._prepare_test_qr_code_integer_data()),
+            actual_data,
         )
 
     def test_raises_malformed_data_received_exception_when_given_bad_input(
