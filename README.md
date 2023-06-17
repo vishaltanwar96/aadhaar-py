@@ -13,7 +13,7 @@ This library helps you extract the embedded information 💾 in Aadhaar Secure Q
 I would like to thank the authors of [pyaadhaar](https://github.com/Tanmoy741127/pyaadhaar). It wouldn't be possible to move into the right direction without this library.
 
 # Demo ✔️
-[Secure Aadhaar QR Decoder](https://aadhaar-secure-qr.herokuapp.com/)
+[Secure Aadhaar QR Decoder](https://aadhaar-py-demo.vercel.app/)
 
 # Enough talk, show me how it works! ✨
 ```python
